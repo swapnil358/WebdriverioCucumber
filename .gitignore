@@ -1,0 +1,29 @@
+# Node modules
+node_modules
+
+# Logs
+logs/
+*.log
+
+# Operating System files
+.DS_Store
+Thumbs.db
+
+# Test and coverage results
+allure-results/
+allure-report/
+reports/
+coverage/
+
+# Environment variables
+.env
+
+# IDE specific files
+.vscode/
+.idea/
+
+# WebdriverIO-specific
+output/
+babel.config.js
+package-lock.json
+.git
