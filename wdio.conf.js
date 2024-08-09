@@ -22,7 +22,8 @@ export const config = {
     // of the config file unless it's absolute.
     //
     specs: [
-        '.tests/features/**/**/login.feature'
+        './tests/features/**/loginPage.feature'
+        //'./tests/features/loginPage.feature'
     ],
     // Patterns to exclude.
     exclude: [
@@ -51,7 +52,10 @@ export const config = {
     // https://saucelabs.com/platform/platform-configurator
     //
     capabilities: [{
-        browserName: 'chrome'
+        browserName: 'chrome',
+            maxInstances: 1,
+            browserName: 'chrome',
+            acceptInsecureCerts: true
     }],
 
     //
@@ -96,7 +100,7 @@ export const config = {
     connectionRetryTimeout: 120000,
     //
     // Default request retries count
-    connectionRetryCount: 3,
+   // connectionRetryCount: 3,
     //
     // Test runner services
     // Services take over a specific job you don't want to take care of. They enhance
@@ -114,7 +118,7 @@ export const config = {
     
     //
     // The number of times to retry the entire specfile when it fails as a whole
-     specFileRetries: 2,
+    // specFileRetries: 2,
     //
     // Delay in seconds between the spec file retry attempts
     // specFileRetriesDelay: 0,
@@ -125,12 +129,12 @@ export const config = {
     // Test reporter for stdout.
     // The only one supported by default is 'dot'
     // see also: https://webdriver.io/docs/dot-reporter
-    reporters: ['spec'],
+   // reporters: ['spec'],
 
     // If you are using Cucumber you need to specify the location of your step definitions.
     cucumberOpts: {
         // <string[]> (file/dir) require files before executing features
-        require: ['./features/step-definitions/steps.js'],
+        require: ['./tests/step-definitions/**/*.js'],
         // <boolean> show full backtrace for errors
         backtrace: false,
         // <string[]> ("extension:module") require files with the given EXTENSION after requiring MODULE (repeatable)

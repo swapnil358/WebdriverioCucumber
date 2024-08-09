@@ -1,13 +1,12 @@
-import assert from "../base/Assert"
-import browser from "../base/Browser";
+import assert from "../base/Assert.js"
+import browser from "../base/Browser.js";
 
 
 
-class loginPage{
-    loginToApplication() {
-        browser.openURL();
-
-
-
+class LoginPage{
+    async loginToApplication(url) {
+        await browser.openURL(url);
     }
 }
+
+export default new LoginPage();
