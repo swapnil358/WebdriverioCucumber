@@ -2,9 +2,15 @@ import { expect } from 'chai'
 
 
 class assert{
-    asserEqual(actual, expected, message) {
-        return expect(actual).to.be.equal(expected, message);
-    }
+    async assertEqual(actual, expected, message) {
+        const errorMessage = message ? message : `Assert failed ==> ${actual} does not match ${expected}`;
+        // Log a message before the assertion
+        console.log(`Asserting that ${actual} equals ${expected}`);
+        // Perform the assertion and provide the error message if it fails
+       await expect(actual).to.be.equal(expected, errorMessage);
+        // Log a success message if the assertion passes
+        console.log(message ? message : `Assertion passed: ${actual} equals ${expected}`);
+    } 
 
     assertNotEqual(actual, expected, message) {
         return expect(actual).to.be.not.equal(expected, message);
