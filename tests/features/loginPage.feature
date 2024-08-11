@@ -2,7 +2,7 @@ Feature: login scenarios
 
   Scenario: As a user, I can log into the secure area
 
-    Given I logged in to app
+    Given User launch to application
     #Given I am on the login page
     #When I login with <username> and <password>
     #Then I should see a flash message saying <message>

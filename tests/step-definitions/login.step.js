@@ -1,12 +1,18 @@
 import { Given, Then, When } from "@wdio/cucumber-framework";
 import loginPage from "../pageobjects/login.js";
+import assert from "../base/Assert.js";
 import Browser from "../base/Browser.js";
-import { browser as wdioBrowser } from '@wdio/globals'
+import commonSelectors from '../../resources/content/common/selectors/common.json' assert { type: 'json' };
 
 
-Given(/^I logged in to app$/, async function(){
-    await wdioBrowser.url('https://www.saucedemo.com/');
-    console.log("===>logged in to application " + await wdioBrowser.getTitle());
+
+Given(/^User launch to application$/, async function(){
+    await loginPage.loginToApplication('https://in.usembassy.gov/');
+    await Browser.maximizeWindow();
+    const ele = await eval(commonSelectors.home.lbl_accessibilityStatement);
+    
+    await Browser.waitForPageToLoad(ele, "Accessibility Statement");
+    //await assert.assertEqual(await wdioBrowser.getTitle(),"U.S. Embassy in Switzerland and Liechtenstein");
    
 } );
 
