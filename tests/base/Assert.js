@@ -48,8 +48,13 @@ class assert{
         return expect(actual).to.be.below(value, message);
     }
 
-    assertInclude(haystack, needle, message) {
-        return expect(haystack).to.include(needle, message);
+    assertElementIsVisible(element, message) {
+        expect(element.isDisplayed()).equal(true, message ? message : element.toString() + "  is not visible");
+    }
+
+    assertInclude(element, expectedText, message) {
+       // expect(element.getText().include(message)).equal(true, message ? message : element.toString() + "  is not visible");
+        expect(element.getText()).to.include(message, message ? message : element.toString() + "  is not visible");
     }
 
     assertNotInclude(haystack, needle, message) {

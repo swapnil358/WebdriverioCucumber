@@ -10,16 +10,19 @@ class Browser{
         await wdioBrowser.maximizeWindow();
     }
 
-    async click() {
-        await wdioBrowser.click();
+    async click(element) {
+        await element.click();
     }
 
-    async getText() {
-        return await wdioBrowser.getText();
+    async getText(element) {
+        await element.waitForDisplayed({ timeout: 5000 });
+        await element.waitForEnabled({ timeout: 5000 });
+        let txt = await wdioBrowser.getElementText(element);
+        console.log("Text Displayed =====>" + txt);
     }
 
     async getPageTitle() {
-        return await wdioBrowser.getTitle();
+        console.log("Page Title==>"+await wdioBrowser.getTitle());
     }
 
     async getAttribute(attributeName) {
@@ -52,6 +55,27 @@ class Browser{
         const currentPageHeader = await element.getText();
         console.log("************Current page Header : " + currentPageHeader + " ************");
     }
+
+    async pause(timeout) {
+        await browser.pause(timeout);
+    }
+    async scrollIntoView(element) {
+        return await element.scrollIntoView(element);
+    }
+
+    // async setValue(element, content) {
+    //     await element.waitForDisplayed(5000);
+    //     await element.setValue(content);
+    // }
+    async setValue(element, content) {
+        await element.waitForDisplayed({ timeout: 5000 });
+        await element.waitForEnabled({ timeout: 5000 });
+        await element.clearValue(); // Clear any existing value first
+        await element.setValue(content);
+    }
+    
+
+
     
 
 }
