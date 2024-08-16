@@ -1,8 +1,8 @@
 import { Given, Then, When } from "@wdio/cucumber-framework";
-import loginPage from "../pageobjects/login.js";
-import assert from "../base/Assert.js";
-import browser from "../base/Browser.js";
-import commonSelectors from '../../resources/selectors/common/common.json' assert { type: 'json' };
+import loginPage from "../../pageobjects/login.js";
+import assert from "../../base/Assert.js";
+import browser from "../../base/Browser.js";
+import commonSelectors from '../../../resources/selectors/common/common.json' assert { type: 'json' };
 
 
 

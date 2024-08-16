@@ -16,6 +16,7 @@
     "wdio": "wdio run ./wdio.conf.js"
   },
   "dependencies": {
+    "@wdio/appium-service": "^9.0.1",
     "winston": "^3.14.1"
   }
 }
