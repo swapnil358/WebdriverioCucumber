@@ -19,8 +19,9 @@ Given(/^User launch to application$/, async function(){
     await browser.click(searchBtn);
     await browser.setValue(eval(commonSelectors.headerMenu.tb_search), "swapnil");
     await browser.pause(5000);
-    for (let i = 0; i <=4; i++) {
-        await browser.getText(eval(commonSelectors.headerMenu.icn_socials.replace("index", i)));
+    for (let i = 1; i <=4; i++) {
+        //await browser.getText(eval(commonSelectors.headerMenu.icn_socials.replace("index", i)));
+        assert.assertElementIsVisible(eval(commonSelectors.headerMenu.icn_socials.replace("index", i)),"Social network menu displayed");
     }
     //await assert.assertEqual(await wdioBrowser.getTitle(),"U.S. Embassy in Switzerland and Liechtenstein");
    

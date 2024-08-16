@@ -48,18 +48,39 @@ class assert{
         return expect(actual).to.be.below(value, message);
     }
 
-    assertElementIsVisible(element, message) {
-        expect(element.isDisplayed()).equal(true, message ? message : element.toString() + "  is not visible");
+    async assertElementIsVisible(element, message) {
+        let message1 = message ? message : element.toString() + "  is not visible";
+        expect(await element.isDisplayed()).equal(true, message1);
     }
+
+    async assertElementIsEnable(element, message) {
+        let message1 = message ? message : element.toString() + "  is not visible";
+        expect(await element.isEnabled()).equal(true, message1);
+    }
+
+    async elementIsSelected(element, message) {
+        let message1 = message ? message : element.toString() + "  is not selected";
+        expect(await element.isSelected()).equal(true, message1);
+    }
+
+    async elementNotSelected() {
+        let message1 = element.toString() + "  is selected";
+        expect(await element.isSelected()).equal(false, message1);
+    }
+
+
 
     assertInclude(element, expectedText, message) {
        // expect(element.getText().include(message)).equal(true, message ? message : element.toString() + "  is not visible");
-        expect(element.getText()).to.include(message, message ? message : element.toString() + "  is not visible");
+        expect(element.getText()).to.include(expectedText, message, message ? message : element.toString() + "  is not visible");
     }
 
-    assertNotInclude(haystack, needle, message) {
-        return expect(haystack).to.not.include(needle, message);
+    assertNotInclude(element, expectedText, message) {
+        return expect(haystack).to.not.include(expectedText, message, message ? message : element.toString() + "  is not visible");
     }
+
+    
+    
 
     
 
