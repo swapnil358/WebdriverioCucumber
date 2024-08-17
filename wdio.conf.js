@@ -51,11 +51,19 @@ export const config = {
     // Sauce Labs platform configurator - a great tool to configure your capabilities:
     // https://saucelabs.com/platform/platform-configurator
     //
-    capabilities: [{
+capabilities: [{
+        maxInstances: 1,
         browserName: 'chrome',
-            maxInstances: 1,
-            browserName: 'chrome',
-            acceptInsecureCerts: true
+        acceptInsecureCerts: true,
+        'goog:chromeOptions': {
+            args: [
+                '--headless', // Enable headless mode
+                '--disable-gpu', // Disable GPU usage
+                '--window-size=1920,1080', // Set window size for headless mode
+                '--no-sandbox', // Recommended for running as root in Docker
+                '--disable-dev-shm-usage' // Overcome limited resource problems
+            ]
+        }
     }],
 
     //
@@ -228,8 +236,9 @@ export const config = {
      * @param {string}                   uri      path to feature file
      * @param {GherkinDocument.IFeature} feature  Cucumber feature object
      */
-    // beforeFeature: function (uri, feature) {
-    // },
+    beforeFeature: function (uri, feature) {
+        console.log('Running feature: ' + feature.name);
+    },
     /**
      *
      * Runs before a Cucumber Scenario.

@@ -1,4 +1,5 @@
 import { browser as wdioBrowser } from '@wdio/globals'
+import { assert } from 'chai';
 
 class Browser {
   async openURL(url) {
@@ -136,8 +137,17 @@ class Browser {
     async pressEnter() {
         
         await this.pressKey('Enter');
-    }
+  }
+  
+  async getCurrentActivity() {
+    const currentActivity = await browser.getActivity();
+    return currentActivity;
+  }
+
 }
+
+
+
 
 export default new Browser();
 
