@@ -1,0 +1,13 @@
+{
+  "home": {
+    "bottonMenu": {
+      "lbl_accessibilityStatement": "$('#menu-item-43468')"
+    }
+  },
+  "headerMenu": {
+    "lbl_visas": "$('//span[text()=\"Visas\"]')",
+    "btn_search": "$('//i[@class=\"ubermenu-icon fa fa-search\"]')",
+    "tb_search": "$('//input[@id=\"query\"]')",
+    "icn_socials" : "$('(//div[@class=\"mo-social-links\"])[1]/a[index]')"
+  }
+}

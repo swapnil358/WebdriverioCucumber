@@ -22,7 +22,7 @@ export const config = {
     // of the config file unless it's absolute.
     //
     specs: [
-        './tests/features/**/loginPage.feature'
+        './tests/features/web/**/*.feature'
         //'./tests/features/loginPage.feature'
     ],
     // Patterns to exclude.
@@ -245,8 +245,26 @@ export const config = {
      * @param {IPickle}            scenario scenario pickle
      * @param {object}             context  Cucumber World object
      */
-    // beforeStep: function (step, scenario, context) {
-    // },
+    beforeStep: function (step, scenario, context) {
+        const green = '\x1b[32m';  // Green color for step name
+        const yellow = '\x1b[33m'; // Yellow color for scenario name
+        const reset = '\x1b[0m';   // Reset to default color
+        console.log('Starting a new step...');
+
+        // console.log("Running scenario: " + scenario.pickle.name );
+        // console.log("Tags: " + scenario.pickle.tags.map(tag => tag.name).join(", "));
+        
+    // Extract and log the scenario name
+    console.log(yellow + "In scenario: " + scenario.name + reset);
+
+    // Extract and log the Gherkin step name (from the step object)
+    console.log(green + "Starting step: " + step.text + reset);
+
+        
+    // Log context details (you can customize this as needed)
+  //  console.log('Context information:', context);
+
+    },
     /**
      *
      * Runs after a Cucumber Step.
@@ -258,8 +276,10 @@ export const config = {
      * @param {number}             result.duration  duration of scenario in milliseconds
      * @param {object}             context          Cucumber World object
      */
-    // afterStep: function (step, scenario, result, context) {
-    // },
+    afterStep: function (step, scenario, result, context) {
+        result.passed ? console.log("true") : console.log("false");
+        
+    },
     /**
      *
      * Runs after a Cucumber Scenario.
