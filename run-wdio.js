@@ -7,10 +7,10 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const args = process.argv.slice(2);
-const featureFileName = args.find(arg => arg.startsWith('--featureFile_name=')).split('=')[1];
+const featureFileName = args.find(arg => arg.startsWith('--FeatureFileName=')).split('=')[1];
 
 if (!featureFileName) {
-  console.error('Feature file name is required. Usage: npm run wdio-web-feature -- --featureFile_name=<file>');
+  console.error('Feature file name is required. Usage: npm run wdio-web-feature -- --FeatureFileName=<file>');
   process.exit(1);
 }
 

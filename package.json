@@ -17,6 +17,7 @@
   },
   "scripts": {
     "wdio": "wdio run ./wdio.conf.js", 
+    "wdio-appium": "wdio run ./appium.conf.js",
     "wdio-web-feature": "node run-wdio.js",
    
     "appium": "wdio run ./appium.conf.js"
