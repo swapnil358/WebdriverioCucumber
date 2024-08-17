@@ -11,7 +11,7 @@ export const config = {
 
   // Specify the test files
   specs: [
-    "./tests/features/mobile/**/app_Login.feature", // Adjust this path to your test files
+    "./tests/features/mobile/**/mobile_login.feature", // Adjust this path to your test files
   ],
 
   exclude: [
