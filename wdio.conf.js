@@ -1,9 +1,9 @@
 export const config = {
-    //
-    // ====================
-    // Runner Configuration
-    // ====================
-    // WebdriverIO supports running e2e tests as well as unit and component tests.
+  //
+  // ====================
+  // Runner Configuration
+  // ====================
+  // WebdriverIO supports running e2e tests as well as unit and component tests.
     runner: 'local',
     
     //
@@ -61,112 +61,112 @@ capabilities: [{
                 '--disable-gpu', // Disable GPU usage
                 '--window-size=1920,1080', // Set window size for headless mode
                 '--no-sandbox', // Recommended for running as root in Docker
-                '--disable-dev-shm-usage' // Overcome limited resource problems
+                '--disable-dev-shm-usage', // Overcome limited resource problems
+                '--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
             ]
         }
     }],
 
-    //
-    // ===================
-    // Test Configurations
-    // ===================
-    // Define all options that are relevant for the WebdriverIO instance here
-    //
-    // Level of logging verbosity: trace | debug | info | warn | error | silent
-    logLevel: 'error',
-    coloredLogs: true,
-    //
-    // Set specific log levels per logger
-    // loggers:
-    // - webdriver, webdriverio
-    // - @wdio/browserstack-service, @wdio/devtools-service, @wdio/sauce-service
-    // - @wdio/mocha-framework, @wdio/jasmine-framework
-    // - @wdio/local-runner
-    // - @wdio/sumologic-reporter
-    // - @wdio/cli, @wdio/config, @wdio/utils
-    // Level of logging verbosity: trace | debug | info | warn | error | silent
-    // logLevels: {
-    //     webdriver: 'info',
-    //     '@wdio/appium-service': 'info'
-    // },
-    //
-    // If you only want to run your tests until a specific amount of tests have failed use
-    // bail (default is 0 - don't bail, run all tests).
-    bail: 0,
-    //
-    // Set a base URL in order to shorten url command calls. If your `url` parameter starts
-    // with `/`, the base url gets prepended, not including the path portion of your baseUrl.
-    // If your `url` parameter starts without a scheme or `/` (like `some/path`), the base url
-    // gets prepended directly.
-    // baseUrl: 'http://localhost:8080',
-    //
-    // Default timeout for all waitFor* commands.
-    waitforTimeout: 10000,
-    //
-    // Default timeout in milliseconds for request
-    // if browser driver or grid doesn't send response
-    connectionRetryTimeout: 120000,
-    //
-    // Default request retries count
-   // connectionRetryCount: 3,
-    //
-    // Test runner services
-    // Services take over a specific job you don't want to take care of. They enhance
-    // your test setup with almost no effort. Unlike plugins, they don't add new
-    // commands. Instead, they hook themselves up into the test process.
-    services: ['visual'],
+  //
+  // ===================
+  // Test Configurations
+  // ===================
+  // Define all options that are relevant for the WebdriverIO instance here
+  //
+  // Level of logging verbosity: trace | debug | info | warn | error | silent
+  logLevel: "error",
+  coloredLogs: true,
+  //
+  // Set specific log levels per logger
+  // loggers:
+  // - webdriver, webdriverio
+  // - @wdio/browserstack-service, @wdio/devtools-service, @wdio/sauce-service
+  // - @wdio/mocha-framework, @wdio/jasmine-framework
+  // - @wdio/local-runner
+  // - @wdio/sumologic-reporter
+  // - @wdio/cli, @wdio/config, @wdio/utils
+  // Level of logging verbosity: trace | debug | info | warn | error | silent
+  // logLevels: {
+  //     webdriver: 'info',
+  //     '@wdio/appium-service': 'info'
+  // },
+  //
+  // If you only want to run your tests until a specific amount of tests have failed use
+  // bail (default is 0 - don't bail, run all tests).
+  bail: 0,
+  //
+  // Set a base URL in order to shorten url command calls. If your `url` parameter starts
+  // with `/`, the base url gets prepended, not including the path portion of your baseUrl.
+  // If your `url` parameter starts without a scheme or `/` (like `some/path`), the base url
+  // gets prepended directly.
+  // baseUrl: 'http://localhost:8080',
+  //
+  // Default timeout for all waitFor* commands.
+  waitforTimeout: 10000,
+  //
+  // Default timeout in milliseconds for request
+  // if browser driver or grid doesn't send response
+  connectionRetryTimeout: 120000,
+  //
+  // Default request retries count
+  // connectionRetryCount: 3,
+  //
+  // Test runner services
+  // Services take over a specific job you don't want to take care of. They enhance
+  // your test setup with almost no effort. Unlike plugins, they don't add new
+  // commands. Instead, they hook themselves up into the test process.
+  services: ["visual"],
 
-    // Framework you want to run your specs with.
-    // The following are supported: Mocha, Jasmine, and Cucumber
-    // see also: https://webdriver.io/docs/frameworks
-    //
-    // Make sure you have the wdio adapter package for the specific framework installed
-    // before running any tests.
-    framework: 'cucumber',
-    
-    //
-    // The number of times to retry the entire specfile when it fails as a whole
-    // specFileRetries: 2,
-    //
-    // Delay in seconds between the spec file retry attempts
-    // specFileRetriesDelay: 0,
-    //
-    // Whether or not retried spec files should be retried immediately or deferred to the end of the queue
-    // specFileRetriesDeferred: false,
-    //
-    // Test reporter for stdout.
-    // The only one supported by default is 'dot'
-    // see also: https://webdriver.io/docs/dot-reporter
-   // reporters: ['spec'],
+  // Framework you want to run your specs with.
+  // The following are supported: Mocha, Jasmine, and Cucumber
+  // see also: https://webdriver.io/docs/frameworks
+  //
+  // Make sure you have the wdio adapter package for the specific framework installed
+  // before running any tests.
+  framework: "cucumber",
 
-    // If you are using Cucumber you need to specify the location of your step definitions.
-    cucumberOpts: {
-        // <string[]> (file/dir) require files before executing features
-        require: ['./tests/step-definitions/**/*.js'],
-        // <boolean> show full backtrace for errors
-        backtrace: false,
-        // <string[]> ("extension:module") require files with the given EXTENSION after requiring MODULE (repeatable)
-        requireModule: [],
-        // <boolean> invoke formatters without executing steps
-        dryRun: false,
-        // <boolean> abort the run on first failure
-        failFast: false,
-        // <string[]> Only execute the scenarios with name matching the expression (repeatable).
-        name: [],
-        // <boolean> hide step definition snippets for pending steps
-        snippets: true,
-        // <boolean> hide source uris
-        source: true,
-        // <boolean> fail if there are any undefined or pending steps
-        strict: false,
-        // <string> (expression) only execute the features or scenarios with tags matching the expression
-        tagExpression: '',
-        // <number> timeout for step definitions
-        timeout: 60000,
-        // <boolean> Enable this config to treat undefined definitions as warnings.
-        ignoreUndefinedDefinitions: false
-    },
+  //
+  // The number of times to retry the entire specfile when it fails as a whole
+  // specFileRetries: 2,
+  //
+  // Delay in seconds between the spec file retry attempts
+  // specFileRetriesDelay: 0,
+  //
+  // Whether or not retried spec files should be retried immediately or deferred to the end of the queue
+  // specFileRetriesDeferred: false,
+  //
+  // Test reporter for stdout.
+  // The only one supported by default is 'dot'
+  // see also: https://webdriver.io/docs/dot-reporter
+  // reporters: ['spec'],
 
+  // If you are using Cucumber you need to specify the location of your step definitions.
+  cucumberOpts: {
+    // <string[]> (file/dir) require files before executing features
+    require: ["./tests/step-definitions/**/*.js"],
+    // <boolean> show full backtrace for errors
+    backtrace: false,
+    // <string[]> ("extension:module") require files with the given EXTENSION after requiring MODULE (repeatable)
+    requireModule: [],
+    // <boolean> invoke formatters without executing steps
+    dryRun: false,
+    // <boolean> abort the run on first failure
+    failFast: false,
+    // <string[]> Only execute the scenarios with name matching the expression (repeatable).
+    name: [],
+    // <boolean> hide step definition snippets for pending steps
+    snippets: true,
+    // <boolean> hide source uris
+    source: true,
+    // <boolean> fail if there are any undefined or pending steps
+    strict: false,
+    // <string> (expression) only execute the features or scenarios with tags matching the expression
+    tagExpression: "",
+    // <number> timeout for step definitions
+    timeout: 60000,
+    // <boolean> Enable this config to treat undefined definitions as warnings.
+    ignoreUndefinedDefinitions: false,
+  },
 
     //
     // =====
@@ -274,95 +274,95 @@ capabilities: [{
   //  console.log('Context information:', context);
 
     },
-    /**
-     *
-     * Runs after a Cucumber Step.
-     * @param {Pickle.IPickleStep} step             step data
-     * @param {IPickle}            scenario         scenario pickle
-     * @param {object}             result           results object containing scenario results
-     * @param {boolean}            result.passed    true if scenario has passed
-     * @param {string}             result.error     error stack if scenario failed
-     * @param {number}             result.duration  duration of scenario in milliseconds
-     * @param {object}             context          Cucumber World object
-     */
-    afterStep: function (step, scenario, result, context) {
-        result.passed ? console.log("true") : console.log("false");
+  /**
+   *
+   * Runs after a Cucumber Step.
+   * @param {Pickle.IPickleStep} step             step data
+   * @param {IPickle}            scenario         scenario pickle
+   * @param {object}             result           results object containing scenario results
+   * @param {boolean}            result.passed    true if scenario has passed
+   * @param {string}             result.error     error stack if scenario failed
+   * @param {number}             result.duration  duration of scenario in milliseconds
+   * @param {object}             context          Cucumber World object
+   */
+  afterStep: function (step, scenario, result, context) {
+      result.passed ? console.log("true") : console.log("false");
         
     },
-    /**
-     *
-     * Runs after a Cucumber Scenario.
-     * @param {ITestCaseHookParameter} world            world object containing information on pickle and test step
-     * @param {object}                 result           results object containing scenario results
-     * @param {boolean}                result.passed    true if scenario has passed
-     * @param {string}                 result.error     error stack if scenario failed
-     * @param {number}                 result.duration  duration of scenario in milliseconds
-     * @param {object}                 context          Cucumber World object
-     */
-    // afterScenario: function (world, result, context) {
-    // },
-    /**
-     *
-     * Runs after a Cucumber Feature.
-     * @param {string}                   uri      path to feature file
-     * @param {GherkinDocument.IFeature} feature  Cucumber feature object
-     */
-    // afterFeature: function (uri, feature) {
-    // },
-    
-    /**
-     * Runs after a WebdriverIO command gets executed
-     * @param {string} commandName hook command name
-     * @param {Array} args arguments that command would receive
-     * @param {number} result 0 - command success, 1 - command error
-     * @param {object} error error object if any
-     */
-    // afterCommand: function (commandName, args, result, error) {
-    // },
-    /**
-     * Gets executed after all tests are done. You still have access to all global variables from
-     * the test.
-     * @param {number} result 0 - test pass, 1 - test fail
-     * @param {Array.<Object>} capabilities list of capabilities details
-     * @param {Array.<String>} specs List of spec file paths that ran
-     */
-    // after: function (result, capabilities, specs) {
-    // },
-    /**
-     * Gets executed right after terminating the webdriver session.
-     * @param {object} config wdio configuration object
-     * @param {Array.<Object>} capabilities list of capabilities details
-     * @param {Array.<String>} specs List of spec file paths that ran
-     */
-    // afterSession: function (config, capabilities, specs) {
-    // },
-    /**
-     * Gets executed after all workers got shut down and the process is about to exit. An error
-     * thrown in the onComplete hook will result in the test run failing.
-     * @param {object} exitCode 0 - success, 1 - fail
-     * @param {object} config wdio configuration object
-     * @param {Array.<Object>} capabilities list of capabilities details
-     * @param {<Object>} results object containing test results
-     */
-    // onComplete: function(exitCode, config, capabilities, results) {
-    // },
-    /**
-    * Gets executed when a refresh happens.
-    * @param {string} oldSessionId session ID of the old session
-    * @param {string} newSessionId session ID of the new session
-    */
-    // onReload: function(oldSessionId, newSessionId) {
-    // }
-    /**
-    * Hook that gets executed before a WebdriverIO assertion happens.
-    * @param {object} params information about the assertion to be executed
-    */
-    // beforeAssertion: function(params) {
-    // }
-    /**
-    * Hook that gets executed after a WebdriverIO assertion happened.
-    * @param {object} params information about the assertion that was executed, including its results
-    */
-    // afterAssertion: function(params) {
-    // }
-}
+  /**
+   *
+   * Runs after a Cucumber Scenario.
+   * @param {ITestCaseHookParameter} world            world object containing information on pickle and test step
+   * @param {object}                 result           results object containing scenario results
+   * @param {boolean}                result.passed    true if scenario has passed
+   * @param {string}                 result.error     error stack if scenario failed
+   * @param {number}                 result.duration  duration of scenario in milliseconds
+   * @param {object}                 context          Cucumber World object
+   */
+  // afterScenario: function (world, result, context) {
+  // },
+  /**
+   *
+   * Runs after a Cucumber Feature.
+   * @param {string}                   uri      path to feature file
+   * @param {GherkinDocument.IFeature} feature  Cucumber feature object
+   */
+  // afterFeature: function (uri, feature) {
+  // },
+
+  /**
+   * Runs after a WebdriverIO command gets executed
+   * @param {string} commandName hook command name
+   * @param {Array} args arguments that command would receive
+   * @param {number} result 0 - command success, 1 - command error
+   * @param {object} error error object if any
+   */
+  // afterCommand: function (commandName, args, result, error) {
+  // },
+  /**
+   * Gets executed after all tests are done. You still have access to all global variables from
+   * the test.
+   * @param {number} result 0 - test pass, 1 - test fail
+   * @param {Array.<Object>} capabilities list of capabilities details
+   * @param {Array.<String>} specs List of spec file paths that ran
+   */
+  // after: function (result, capabilities, specs) {
+  // },
+  /**
+   * Gets executed right after terminating the webdriver session.
+   * @param {object} config wdio configuration object
+   * @param {Array.<Object>} capabilities list of capabilities details
+   * @param {Array.<String>} specs List of spec file paths that ran
+   */
+  // afterSession: function (config, capabilities, specs) {
+  // },
+  /**
+   * Gets executed after all workers got shut down and the process is about to exit. An error
+   * thrown in the onComplete hook will result in the test run failing.
+   * @param {object} exitCode 0 - success, 1 - fail
+   * @param {object} config wdio configuration object
+   * @param {Array.<Object>} capabilities list of capabilities details
+   * @param {<Object>} results object containing test results
+   */
+  // onComplete: function(exitCode, config, capabilities, results) {
+  // },
+  /**
+   * Gets executed when a refresh happens.
+   * @param {string} oldSessionId session ID of the old session
+   * @param {string} newSessionId session ID of the new session
+   */
+  // onReload: function(oldSessionId, newSessionId) {
+  // }
+  /**
+   * Hook that gets executed before a WebdriverIO assertion happens.
+   * @param {object} params information about the assertion to be executed
+   */
+  // beforeAssertion: function(params) {
+  // }
+  /**
+   * Hook that gets executed after a WebdriverIO assertion happened.
+   * @param {object} params information about the assertion that was executed, including its results
+   */
+  // afterAssertion: function(params) {
+  // }
+};

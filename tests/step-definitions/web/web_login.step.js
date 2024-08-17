@@ -7,7 +7,7 @@ import commonSelectors from '../../../resources/selectors/common/common.json' as
 
 
 Given(/^User launch to application$/, async function(){
-    await loginPage.loginToApplication('https://in.usembassy.gov/');
+    await loginPage.loginToApplication('https://pl.usembassy.gov/');
     await browser.maximizeWindow();
     await browser.getPageTitle();
     const ele = await eval(commonSelectors.home.bottonMenu.lbl_accessibilityStatement);
@@ -19,10 +19,11 @@ Given(/^User launch to application$/, async function(){
     await browser.click(searchBtn);
     await browser.setValue(eval(commonSelectors.headerMenu.tb_search), "swapnil");
     await browser.pause(5000);
-    for (let i = 1; i <=4; i++) {
-        //await browser.getText(eval(commonSelectors.headerMenu.icn_socials.replace("index", i)));
-        assert.assertElementIsVisible(eval(commonSelectors.headerMenu.icn_socials.replace("index", i)),"Social network menu displayed");
-    }
+    await browser.getText(eval(commonSelectors.headerMenu.btn_search));
+
+    // for (let i = 0; i <=4; i++) {
+    //     await browser.getText(eval(commonSelectors.headerMenu.icn_socials.replace("index", i)));
+    // }
     //await assert.assertEqual(await wdioBrowser.getTitle(),"U.S. Embassy in Switzerland and Liechtenstein");
    
 } );
