@@ -1,5 +1,6 @@
 Feature: login scenarios
 
+@login
   Scenario: As a user, I can log into the secure area
 
     Given User launch to application

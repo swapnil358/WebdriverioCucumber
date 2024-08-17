@@ -131,7 +131,12 @@ class Browser {
     async function isElementSelected(element) {
       return await element.isSelected();
     }
-  }
+    }
+    
+    async pressEnter() {
+        
+        await this.pressKey('Enter');
+    }
 }
 
 export default new Browser();

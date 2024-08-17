@@ -22,7 +22,7 @@ export const config = {
     // of the config file unless it's absolute.
     //
     specs: [
-        './tests/features/**/loginPage.feature'
+        './tests/features/mobile/**/loginPage.feature'
         //'./tests/features/loginPage.feature'
     ],
     // Patterns to exclude.
@@ -52,10 +52,10 @@ export const config = {
     // https://saucelabs.com/platform/platform-configurator
     //
     capabilities: [{
-        browserName: 'chrome',
-            maxInstances: 1,
-            browserName: 'chrome',
-            acceptInsecureCerts: true
+        platformName: 'Android',
+        deviceName: 'emulator-5554',
+        app: '/path/to/your/app.apk',
+        automationName: 'UiAutomator2',
     }],
 
     //
@@ -106,7 +106,7 @@ export const config = {
     // Services take over a specific job you don't want to take care of. They enhance
     // your test setup with almost no effort. Unlike plugins, they don't add new
     // commands. Instead, they hook themselves up into the test process.
-    services: ['visual'],
+    services: ['appium'],
 
     // Framework you want to run your specs with.
     // The following are supported: Mocha, Jasmine, and Cucumber
@@ -134,7 +134,7 @@ export const config = {
     // If you are using Cucumber you need to specify the location of your step definitions.
     cucumberOpts: {
         // <string[]> (file/dir) require files before executing features
-        require: ['./tests/step-definitions/**/*.js'],
+        require: ['./tests/step-definitions/mobile/**/*.js'],
         // <boolean> show full backtrace for errors
         backtrace: false,
         // <string[]> ("extension:module") require files with the given EXTENSION after requiring MODULE (repeatable)
@@ -212,8 +212,9 @@ export const config = {
      * @param {Array.<String>} specs        List of spec file paths that are to be run
      * @param {object}         browser      instance of created browser/device session
      */
-    // before: function (capabilities, specs) {
-    // },
+    before: function (capabilities, specs) {
+        console.log('Starting a new scenario...');
+    },
     /**
      * Runs before a WebdriverIO command gets executed.
      * @param {string} commandName hook command name
@@ -246,24 +247,10 @@ export const config = {
      * @param {object}             context  Cucumber World object
      */
     beforeStep: function (step, scenario, context) {
-        const green = '\x1b[32m';  // Green color for step name
-        const yellow = '\x1b[33m'; // Yellow color for scenario name
-        const reset = '\x1b[0m';   // Reset to default color
         console.log('Starting a new step...');
-
-        // console.log("Running scenario: " + scenario.pickle.name );
-        // console.log("Tags: " + scenario.pickle.tags.map(tag => tag.name).join(", "));
-        
-    // Extract and log the scenario name
-    console.log(yellow + "In scenario: " + scenario.name + reset);
-
-    // Extract and log the Gherkin step name (from the step object)
-    console.log(green + "Starting step: " + step.text + reset);
-
-        
-    // Log context details (you can customize this as needed)
-  //  console.log('Context information:', context);
-
+        console.log(step.Pickle,
+            scenario.Pickle,
+            context.Pickle)
     },
     /**
      *
@@ -276,10 +263,8 @@ export const config = {
      * @param {number}             result.duration  duration of scenario in milliseconds
      * @param {object}             context          Cucumber World object
      */
-    afterStep: function (step, scenario, result, context) {
-        result.passed ? console.log("true") : console.log("false");
-        
-    },
+    // afterStep: function (step, scenario, result, context) {
+    // },
     /**
      *
      * Runs after a Cucumber Scenario.
