@@ -1,5 +1,7 @@
 import { browser as wdioBrowser } from '@wdio/globals'
 import { assert } from 'chai';
+import path from 'path';
+import fs from 'fs';
 
 class Browser {
   async openURL(url) {
@@ -132,17 +134,65 @@ class Browser {
     async function isElementSelected(element) {
       return await element.isSelected();
     }
-    }
-    
-    async pressEnter() {
-        
-        await this.pressKey('Enter');
   }
-  
+
+  async pressEnter() {
+    await this.pressKey("Enter");
+  }
+
   async getCurrentActivity() {
     const currentActivity = await browser.getActivity();
     return currentActivity;
   }
+
+  async captureScreenshot(filename) {
+    const screenshotsDir = "./screenshots";
+    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+    const fullFilename = path.join(
+      screenshotsDir,
+      filename + "-" + timestamp + ".png"
+    );
+
+    // Ensure screenshots directory exists
+    if (!fs.existsSync(screenshotsDir)) {
+      fs.mkdirSync(screenshotsDir);
+    }
+
+    await browser.saveScreenshot(fullFilename);
+    console.log("Screenshot saved: " + fullFilename);
+  }
+
+  async captureFullPageScreenshot(filename) {
+    const screenshotsDir = "./screenshots";
+    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+    const fullFilename = path.join(screenshotsDir, filename + "-" + timestamp + ".png");
+  }
+   
+  async saveFullPageScreen() {
+    await wdioBrowser.saveFullPageScreen("fullPage",{});
+  }
+//     // Ensure screenshots directory exists
+//     if (!fs.existsSync(screenshotsDir)) {
+//         fs.mkdirSync(screenshotsDir);
+//     }
+
+//     try {
+//         // Get the total scrollable height
+//         const scrollHeight = await browser.execute(() => document.body.scrollHeight);
+//         console.log('Scrollable height:', scrollHeight);
+
+//         // Capture the full page screenshot
+//         const screenshot = await browser.takeScreenshot();
+//         fs.writeFileSync(fullFilename, Buffer.from(screenshot, 'base64'));
+//         console.log("Screenshot saved: " + fullFilename);
+//     } catch (error) {
+//       console.error("Error capturing full-page screenshot:", error);
+      
+//     }
+    
+// }
+
+
 
 }
 

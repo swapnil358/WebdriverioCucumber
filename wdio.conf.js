@@ -1,71 +1,77 @@
+import browser from ".//tests/base/Browser.js";
+import { join } from 'path';
+
 export const config = {
   //
   // ====================
   // Runner Configuration
   // ====================
   // WebdriverIO supports running e2e tests as well as unit and component tests.
-    runner: 'local',
-    
-    //
-    // ==================
-    // Specify Test Files
-    // ==================
-    // Define which test specs should run. The pattern is relative to the directory
-    // of the configuration file being run.
-    //
-    // The specs are defined as an array of spec files (optionally using wildcards
-    // that will be expanded). The test for each spec file will be run in a separate
-    // worker process. In order to have a group of spec files run in the same worker
-    // process simply enclose them in an array within the specs array.
-    //
-    // The path of the spec files will be resolved relative from the directory of
-    // of the config file unless it's absolute.
-    //
-    specs: [
-        './tests/features/web/**/*.feature'
-        //'./tests/features/loginPage.feature'
-    ],
-    // Patterns to exclude.
-    exclude: [
-        // 'path/to/excluded/files'
-    ],
-    //
-    // ============
-    // Capabilities
-    // ============
-    // Define your capabilities here. WebdriverIO can run multiple capabilities at the same
-    // time. Depending on the number of capabilities, WebdriverIO launches several test
-    // sessions. Within your capabilities you can overwrite the spec and exclude options in
-    // order to group specific specs to a specific capability.
-    //
-    // First, you can define how many instances should be started at the same time. Let's
-    // say you have 3 different capabilities (Chrome, Firefox, and Safari) and you have
-    // set maxInstances to 1; wdio will spawn 3 processes. Therefore, if you have 10 spec
-    // files and you set maxInstances to 10, all spec files will get tested at the same time
-    // and 30 processes will get spawned. The property handles how many capabilities
-    // from the same test should run tests.
-    //
-    maxInstances: 10,
-    //
-    // If you have trouble getting all important capabilities together, check out the
-    // Sauce Labs platform configurator - a great tool to configure your capabilities:
-    // https://saucelabs.com/platform/platform-configurator
-    //
-capabilities: [{
-        maxInstances: 1,
-        browserName: 'chrome',
-        acceptInsecureCerts: true,
-        'goog:chromeOptions': {
-            args: [
-                '--headless', // Enable headless mode
-                '--disable-gpu', // Disable GPU usage
-                '--window-size=1920,1080', // Set window size for headless mode
-                '--no-sandbox', // Recommended for running as root in Docker
-                '--disable-dev-shm-usage', // Overcome limited resource problems
-                '--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-            ]
-        }
-    }],
+  runner: "local",
+
+  //
+  // ==================
+  // Specify Test Files
+  // ==================
+  // Define which test specs should run. The pattern is relative to the directory
+  // of the configuration file being run.
+  //
+  // The specs are defined as an array of spec files (optionally using wildcards
+  // that will be expanded). The test for each spec file will be run in a separate
+  // worker process. In order to have a group of spec files run in the same worker
+  // process simply enclose them in an array within the specs array.
+  //
+  // The path of the spec files will be resolved relative from the directory of
+  // of the config file unless it's absolute.
+  //
+  specs: [
+    "./tests/features/web/**/web_login.feature",
+    //'./tests/features/loginPage.feature'
+  ],
+  // Patterns to exclude.
+  exclude: [
+    // 'path/to/excluded/files'
+  ],
+  //
+  // ============
+  // Capabilities
+  // ============
+  // Define your capabilities here. WebdriverIO can run multiple capabilities at the same
+  // time. Depending on the number of capabilities, WebdriverIO launches several test
+  // sessions. Within your capabilities you can overwrite the spec and exclude options in
+  // order to group specific specs to a specific capability.
+  //
+  // First, you can define how many instances should be started at the same time. Let's
+  // say you have 3 different capabilities (Chrome, Firefox, and Safari) and you have
+  // set maxInstances to 1; wdio will spawn 3 processes. Therefore, if you have 10 spec
+  // files and you set maxInstances to 10, all spec files will get tested at the same time
+  // and 30 processes will get spawned. The property handles how many capabilities
+  // from the same test should run tests.
+  //
+  maxInstances: 1,
+  //
+  // If you have trouble getting all important capabilities together, check out the
+  // Sauce Labs platform configurator - a great tool to configure your capabilities:
+  // https://saucelabs.com/platform/platform-configurator
+  //
+  capabilities: [
+    {
+      maxInstances: 1,
+      browserName: "chrome",
+      acceptInsecureCerts: true,
+      "goog:chromeOptions": {
+        args: [
+        //  "--headless", // Enable headless mode
+          "--disable-gpu", // Disable GPU usage
+          "--window-size=1920,1080", // Set window size for headless mode
+          "--no-sandbox", // Recommended for running as root in Docker
+          "--disable-dev-shm-usage", // Overcome limited resource problems
+          //  "--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+          '--disable-software-rasterizer', // Disable GPU rasterization (can reduce resource usage)
+        ],
+      },
+    },
+  ],
 
   //
   // ===================
@@ -115,7 +121,13 @@ capabilities: [{
   // Services take over a specific job you don't want to take care of. They enhance
   // your test setup with almost no effort. Unlike plugins, they don't add new
   // commands. Instead, they hook themselves up into the test process.
-  services: ["visual"],
+  services: (process.env.DOCKER === "true" ? [] : ["chromedriver"]).concat([['image-comparison',
+      {
+        baselineFolder: join(process.cwd(), './reports/screenshots/'),
+        screenshotPath: join(process.cwd(), './reports/screenshots/'),
+        savePerInstance: true,
+        autoSaveBaseline: true,
+      }]]),
 
   // Framework you want to run your specs with.
   // The following are supported: Mocha, Jasmine, and Cucumber
@@ -168,112 +180,110 @@ capabilities: [{
     ignoreUndefinedDefinitions: false,
   },
 
-    //
-    // =====
-    // Hooks
-    // =====
-    // WebdriverIO provides several hooks you can use to interfere with the test process in order to enhance
-    // it and to build services around it. You can either apply a single function or an array of
-    // methods to it. If one of them returns with a promise, WebdriverIO will wait until that promise got
-    // resolved to continue.
-    /**
-     * Gets executed once before all workers get launched.
-     * @param {object} config wdio configuration object
-     * @param {Array.<Object>} capabilities list of capabilities details
-     */
-    // onPrepare: function (config, capabilities) {
-    // },
-    /**
-     * Gets executed before a worker process is spawned and can be used to initialize specific service
-     * for that worker as well as modify runtime environments in an async fashion.
-     * @param  {string} cid      capability id (e.g 0-0)
-     * @param  {object} caps     object containing capabilities for session that will be spawn in the worker
-     * @param  {object} specs    specs to be run in the worker process
-     * @param  {object} args     object that will be merged with the main configuration once worker is initialized
-     * @param  {object} execArgv list of string arguments passed to the worker process
-     */
-    // onWorkerStart: function (cid, caps, specs, args, execArgv) {
-    // },
-    /**
-     * Gets executed just after a worker process has exited.
-     * @param  {string} cid      capability id (e.g 0-0)
-     * @param  {number} exitCode 0 - success, 1 - fail
-     * @param  {object} specs    specs to be run in the worker process
-     * @param  {number} retries  number of retries used
-     */
-    // onWorkerEnd: function (cid, exitCode, specs, retries) {
-    // },
-    /**
-     * Gets executed just before initialising the webdriver session and test framework. It allows you
-     * to manipulate configurations depending on the capability or spec.
-     * @param {object} config wdio configuration object
-     * @param {Array.<Object>} capabilities list of capabilities details
-     * @param {Array.<String>} specs List of spec file paths that are to be run
-     * @param {string} cid worker id (e.g. 0-0)
-     */
-    // beforeSession: function (config, capabilities, specs, cid) {
-    // },
-    /**
-     * Gets executed before test execution begins. At this point you can access to all global
-     * variables like `browser`. It is the perfect place to define custom commands.
-     * @param {Array.<Object>} capabilities list of capabilities details
-     * @param {Array.<String>} specs        List of spec file paths that are to be run
-     * @param {object}         browser      instance of created browser/device session
-     */
-    // before: function (capabilities, specs) {
-    // },
-    /**
-     * Runs before a WebdriverIO command gets executed.
-     * @param {string} commandName hook command name
-     * @param {Array} args arguments that command would receive
-     */
-    // beforeCommand: function (commandName, args) {
-    // },
-    /**
-     * Cucumber Hooks
-     *
-     * Runs before a Cucumber Feature.
-     * @param {string}                   uri      path to feature file
-     * @param {GherkinDocument.IFeature} feature  Cucumber feature object
-     */
-    beforeFeature: function (uri, feature) {
-        console.log('Running feature: ' + feature.name);
-    },
-    /**
-     *
-     * Runs before a Cucumber Scenario.
-     * @param {ITestCaseHookParameter} world    world object containing information on pickle and test step
-     * @param {object}                 context  Cucumber World object
-     */
-    // beforeScenario: function (world, context) {
-    // },
-    /**
-     *
-     * Runs before a Cucumber Step.
-     * @param {Pickle.IPickleStep} step     step data
-     * @param {IPickle}            scenario scenario pickle
-     * @param {object}             context  Cucumber World object
-     */
-    beforeStep: function (step, scenario, context) {
-        const green = '\x1b[32m';  // Green color for step name
-        const yellow = '\x1b[33m'; // Yellow color for scenario name
-        const reset = '\x1b[0m';   // Reset to default color
-        console.log('Starting a new step...');
+  //
+  // =====
+  // Hooks
+  // =====
+  // WebdriverIO provides several hooks you can use to interfere with the test process in order to enhance
+  // it and to build services around it. You can either apply a single function or an array of
+  // methods to it. If one of them returns with a promise, WebdriverIO will wait until that promise got
+  // resolved to continue.
+  /**
+   * Gets executed once before all workers get launched.
+   * @param {object} config wdio configuration object
+   * @param {Array.<Object>} capabilities list of capabilities details
+   */
+  // onPrepare: function (config, capabilities) {
+  // },
+  /**
+   * Gets executed before a worker process is spawned and can be used to initialize specific service
+   * for that worker as well as modify runtime environments in an async fashion.
+   * @param  {string} cid      capability id (e.g 0-0)
+   * @param  {object} caps     object containing capabilities for session that will be spawn in the worker
+   * @param  {object} specs    specs to be run in the worker process
+   * @param  {object} args     object that will be merged with the main configuration once worker is initialized
+   * @param  {object} execArgv list of string arguments passed to the worker process
+   */
+  // onWorkerStart: function (cid, caps, specs, args, execArgv) {
+  // },
+  /**
+   * Gets executed just after a worker process has exited.
+   * @param  {string} cid      capability id (e.g 0-0)
+   * @param  {number} exitCode 0 - success, 1 - fail
+   * @param  {object} specs    specs to be run in the worker process
+   * @param  {number} retries  number of retries used
+   */
+  // onWorkerEnd: function (cid, exitCode, specs, retries) {
+  // },
+  /**
+   * Gets executed just before initialising the webdriver session and test framework. It allows you
+   * to manipulate configurations depending on the capability or spec.
+   * @param {object} config wdio configuration object
+   * @param {Array.<Object>} capabilities list of capabilities details
+   * @param {Array.<String>} specs List of spec file paths that are to be run
+   * @param {string} cid worker id (e.g. 0-0)
+   */
+  // beforeSession: function (config, capabilities, specs, cid) {
+  // },
+  /**
+   * Gets executed before test execution begins. At this point you can access to all global
+   * variables like `browser`. It is the perfect place to define custom commands.
+   * @param {Array.<Object>} capabilities list of capabilities details
+   * @param {Array.<String>} specs        List of spec file paths that are to be run
+   * @param {object}         browser      instance of created browser/device session
+   */
+  // before: function (capabilities, specs) {
+  // },
+  /**
+   * Runs before a WebdriverIO command gets executed.
+   * @param {string} commandName hook command name
+   * @param {Array} args arguments that command would receive
+   */
+  // beforeCommand: function (commandName, args) {
+  // },
+  /**
+   * Cucumber Hooks
+   *
+   * Runs before a Cucumber Feature.
+   * @param {string}                   uri      path to feature file
+   * @param {GherkinDocument.IFeature} feature  Cucumber feature object
+   */
+  beforeFeature: function (uri, feature) {
+    console.log("Running feature: " + feature.name);
+  },
+  /**
+   *
+   * Runs before a Cucumber Scenario.
+   * @param {ITestCaseHookParameter} world    world object containing information on pickle and test step
+   * @param {object}                 context  Cucumber World object
+   */
+  // beforeScenario: function (world, context) {
+  // },
+  /**
+   *
+   * Runs before a Cucumber Step.
+   * @param {Pickle.IPickleStep} step     step data
+   * @param {IPickle}            scenario scenario pickle
+   * @param {object}             context  Cucumber World object
+   */
+  beforeStep: function (step, scenario, context) {
+    const green = "\x1b[32m"; // Green color for step name
+    const yellow = "\x1b[33m"; // Yellow color for scenario name
+    const reset = "\x1b[0m"; // Reset to default color
+    console.log("Starting a new step...");
 
-        // console.log("Running scenario: " + scenario.pickle.name );
-        // console.log("Tags: " + scenario.pickle.tags.map(tag => tag.name).join(", "));
-        
+    // console.log("Running scenario: " + scenario.pickle.name );
+    // console.log("Tags: " + scenario.pickle.tags.map(tag => tag.name).join(", "));
+
     // Extract and log the scenario name
     console.log(yellow + "In scenario: " + scenario.name + reset);
 
     // Extract and log the Gherkin step name (from the step object)
     console.log(green + "Starting step: " + step.text + reset);
 
-        
     // Log context details (you can customize this as needed)
-  //  console.log('Context information:', context);
-
-    },
+    //  console.log('Context information:', context);
+  },
   /**
    *
    * Runs after a Cucumber Step.
@@ -286,9 +296,17 @@ capabilities: [{
    * @param {object}             context          Cucumber World object
    */
   afterStep: function (step, scenario, result, context) {
-      result.passed ? console.log("true") : console.log("false");
-        
-    },
+    if (!result.passed) {
+      browser.saveFullPageScreen();
+    //   try {
+    //     browser.captureFullPageScreenshot("screenshot");
+    //     console.log("Screenshot captured for failed step.");
+    // } catch (error) {
+    //     console.error("Error capturing screenshot:", error);
+    // }
+    }
+    result.passed ? console.log("true") : console.log("false");
+  },
   /**
    *
    * Runs after a Cucumber Scenario.

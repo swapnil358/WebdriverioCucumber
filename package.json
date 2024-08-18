@@ -12,11 +12,14 @@
     "@wdio/spec-reporter": "^8.39.0",
     "@wdio/visual-service": "^5.2.1",
     "chai": "^4.5.0",
+    "chromedriver": "^127.0.3",
     "cross-env": "^7.0.3",
-    "typescript": "^5.5.4"
+    "typescript": "^5.5.4",
+    "wdio-chromedriver-service": "^8.1.1",
+    "wdio-image-comparison-service": "^5.0.3"
   },
   "scripts": {
-    "wdio": "wdio run ./wdio.conf.js", 
+    "wdio": "wdio run ./wdio.conf.js",
     "wdio-appium": "wdio run ./appium.conf.js",
     "wdio-feature": "node run-wdio.js",
     "appium": "wdio run ./appium.conf.js"
