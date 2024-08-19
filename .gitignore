@@ -12,7 +12,6 @@ Thumbs.db
 # Test and coverage results
 allure-results/
 allure-report/
-reports/
 coverage/
 
 # Environment variables
