@@ -12,7 +12,8 @@ Given(/^User launch to application$/, async function(){
     await browser.getPageTitle();
     const ele = await eval(commonSelectors.home.bottonMenu.lbl_accessibilityStatement);
     //await browser.scrollIntoView(ele);
-    await browser.waitForPageToLoad(ele, "Accessibility Statemen");
+    await browser.waitForPageToLoad(ele, "Accessibility Statement");
+    browser.saveFullPageScreen();
     const visa = await eval(commonSelectors.headerMenu.lbl_visas);
     //console.log(await browser.getText(visa));
     const searchBtn = await eval(commonSelectors.headerMenu.btn_search);

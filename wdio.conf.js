@@ -61,12 +61,12 @@ export const config = {
       acceptInsecureCerts: true,
       "goog:chromeOptions": {
         args: [
-        //  "--headless", // Enable headless mode
+          "--headless", // Enable headless mode
           "--disable-gpu", // Disable GPU usage
           "--window-size=1920,1080", // Set window size for headless mode
           "--no-sandbox", // Recommended for running as root in Docker
           "--disable-dev-shm-usage", // Overcome limited resource problems
-          //  "--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+          "--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
           '--disable-software-rasterizer', // Disable GPU rasterization (can reduce resource usage)
         ],
       },
@@ -127,6 +127,8 @@ export const config = {
         screenshotPath: join(process.cwd(), './reports/screenshots/'),
         savePerInstance: true,
         autoSaveBaseline: true,
+        blockOutStatusBar: true,
+        blockOutToolBar: true,
       }]]),
 
   // Framework you want to run your specs with.
@@ -232,8 +234,13 @@ export const config = {
    * @param {Array.<String>} specs        List of spec file paths that are to be run
    * @param {object}         browser      instance of created browser/device session
    */
-  // before: function (capabilities, specs) {
-  // },
+  before: async function (capabilities, specs) {
+    if (typeof browser.saveFullPageScreen === 'function') {
+      console.log("Image Comparison service initialized and available.");
+    } else {
+      console.error("Image Comparison service not initialized properly.");
+    }
+  },
   /**
    * Runs before a WebdriverIO command gets executed.
    * @param {string} commandName hook command name

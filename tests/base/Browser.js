@@ -48,9 +48,9 @@ class Browser {
   }
 
   async waitForPageToLoad(element, pageHeader) {
-    await browser.waitUntil(
+    await wdioBrowser.waitUntil(
       async function () {
-        const state = await browser.execute(() => document.readyState);
+        const state = await wdioBrowser.execute(() => document.readyState);
         if (state === "complete") {
           const text = await element.getText();
           return text.toUpperCase().trim() === pageHeader.toUpperCase().trim();
@@ -72,7 +72,7 @@ class Browser {
   }
 
   async pause(timeout) {
-    await browser.pause(timeout);
+    await wdioBrowser.pause(timeout);
   }
   async scrollIntoView(element) {
     return await element.scrollIntoView(element);
@@ -97,7 +97,7 @@ class Browser {
       interval = 500,
     } = {}
   ) {
-    await browser.waitUntil(conditionFn, {
+    await wdioBrowser.waitUntil(conditionFn, {
       timeout,
       timeoutMsg,
       interval,
@@ -141,7 +141,7 @@ class Browser {
   }
 
   async getCurrentActivity() {
-    const currentActivity = await browser.getActivity();
+    const currentActivity = await wdioBrowser.getActivity();
     return currentActivity;
   }
 
@@ -158,7 +158,7 @@ class Browser {
       fs.mkdirSync(screenshotsDir);
     }
 
-    await browser.saveScreenshot(fullFilename);
+    await wdioBrowser.saveScreenshot(fullFilename);
     console.log("Screenshot saved: " + fullFilename);
   }
 
@@ -169,8 +169,14 @@ class Browser {
   }
    
   async saveFullPageScreen() {
-    await wdioBrowser.saveFullPageScreen("fullPage",{});
-  }
+    console.log("Attempting to capture full page screenshot");
+    try {
+        await wdioBrowser.saveFullPageScreen("fullPage", {});
+        console.log("Screenshot captured successfully");
+    } catch (error) {
+        console.error("Error capturing screenshot:", error);
+    }
+}
 //     // Ensure screenshots directory exists
 //     if (!fs.existsSync(screenshotsDir)) {
 //         fs.mkdirSync(screenshotsDir);
