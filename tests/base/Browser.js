@@ -162,11 +162,6 @@ class Browser {
     console.log("Screenshot saved: " + fullFilename);
   }
 
-  async captureFullPageScreenshot(filename) {
-    const screenshotsDir = "./screenshots";
-    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
-    const fullFilename = path.join(screenshotsDir, filename + "-" + timestamp + ".png");
-  }
    
   async saveFullPageScreen() {
     console.log("Attempting to capture full page screenshot");
