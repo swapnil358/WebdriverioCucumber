@@ -177,27 +177,6 @@ class Browser {
         console.error("Error capturing screenshot:", error);
     }
 }
-//     // Ensure screenshots directory exists
-//     if (!fs.existsSync(screenshotsDir)) {
-//         fs.mkdirSync(screenshotsDir);
-//     }
-
-//     try {
-//         // Get the total scrollable height
-//         const scrollHeight = await browser.execute(() => document.body.scrollHeight);
-//         console.log('Scrollable height:', scrollHeight);
-
-//         // Capture the full page screenshot
-//         const screenshot = await browser.takeScreenshot();
-//         fs.writeFileSync(fullFilename, Buffer.from(screenshot, 'base64'));
-//         console.log("Screenshot saved: " + fullFilename);
-//     } catch (error) {
-//       console.error("Error capturing full-page screenshot:", error);
-      
-//     }
-    
-// }
-
 
 
 }
