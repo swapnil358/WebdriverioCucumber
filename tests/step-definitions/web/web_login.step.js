@@ -6,30 +6,39 @@ import commonSelectors from '../../../resources/selectors/common/common.json' as
 
 
 
-Given(/^User launch to application$/, async function(){
-    await loginPage.loginToApplication('https://pl.usembassy.gov/');
-    await browser.maximizeWindow();
-    await browser.getPageTitle();
-    const ele = await eval(commonSelectors.home.bottonMenu.lbl_accessibilityStatement);
-    //await browser.scrollIntoView(ele);
-    await browser.waitForPageToLoad(ele, "Accessibility Statement");
-    browser.saveFullPageScreen();
-    const visa = await eval(commonSelectors.headerMenu.lbl_visas);
-    //console.log(await browser.getText(visa));
-    const searchBtn = await eval(commonSelectors.headerMenu.btn_search);
-    await browser.click(searchBtn);
-    await browser.setValue(eval(commonSelectors.headerMenu.tb_search), "swapnil");
-    await browser.pause(5000);
-    await browser.getText(eval(commonSelectors.headerMenu.btn_search));
-
-    // for (let i = 0; i <=4; i++) {
-    //     await browser.getText(eval(commonSelectors.headerMenu.icn_socials.replace("index", i)));
-    // }
-    //await assert.assertEqual(await wdioBrowser.getTitle(),"U.S. Embassy in Switzerland and Liechtenstein");
-   
-} );
-
-
-// Then(/^I should see a flash message saying "{message}"$/, (  ) =>{
-//     console.log("Flash message displayed");
+// Given(/^User launch to application$/, async function(){
+//     await loginPage.loginToApplication('https://pl.usembassy.gov/');
+      
 // } );
+
+Given('I am on the Amazon login page', async function () {
+    await loginPage.launchUrl('https://opensource-demo.orangehrmlive.com/');
+    browser.getPageTitle();
+   // await assert.assertPageTitle('Amazon Sign-In', "Page title does not match 'Amazon Sign-In'");
+    // await assert.assertElementIsVisible(eval(commonSelectors.headerMenu.login), "Login Button is not visible");
+    //await assert.assertEqual("swapnil", "Swapnil");
+    //browser.saveFullPageScreen();
+});
+
+When('I enter a valid email and password', async function () {
+    await browser.setValue(eval(commonSelectors.login.username), 'admin');
+    await browser.setValue(eval(commonSelectors.login.password), 'admin123');
+    
+    
+    browser.getPageTitle();
+});
+
+When('I click the login button', async function () {
+    await browser.click(eval(commonSelectors.login.btn_login));
+    
+    
+});
+
+Then('I should be redirected to the Amazon homepage', async function () {
+    await browser.waitForElementToBeVisible(eval(commonSelectors.headerMenu.btn_upgrade));
+    
+});
+
+Then('I should see a welcome message with my username', async function () {
+    browser.checkUseNavigatedToCorrectUrl("demo.orangehrmlive.com")
+});

@@ -1,5 +1,4 @@
-import { browser as wdioBrowser } from '@wdio/globals'
-import { assert } from 'chai';
+import { browser as wdioBrowser } from '@wdio/globals';
 import path from 'path';
 import fs from 'fs';
 
@@ -19,37 +18,39 @@ class Browser {
   async getText(element) {
     await element.waitForDisplayed({ timeout: 5000 });
     await element.waitForEnabled({ timeout: 5000 });
-    let txt = await element.getText(element);
+    const txt = await element.getText();
     console.log("Text Displayed =====>" + txt);
+    return txt;
   }
 
   async getPageTitle() {
-    console.log("Page Title==>" + (await wdioBrowser.getTitle()));
+    const title = await wdioBrowser.getTitle();
+    console.log("Page Title==>" + title);
+    return title;
   }
 
-  async getAttribute(attributeName) {
-    return await wdioBrowser.getAttribute(attributeName);
+  async getAttribute(element, attributeName) {
+    return await element.getAttribute(attributeName);
   }
 
   async waitForElementToBeVisible(element) {
     await this.waitForCondition(
-      async () => {
-        return await element.isDisplayed();
-      },
+      async () => await element.isDisplayed(),
       {
         timeoutMsg: `Element "${element.toString()}" is not visible after the given time`,
       }
     );
+    console.log("Element Displayed ===> " + await element.toString());
   }
 
   async waitForDisplayAndClick(element) {
-    await this.waitForElementToBeDisplay(element);
+    await this.waitForElementToBeVisible(element);
     await element.click();
   }
 
   async waitForPageToLoad(element, pageHeader) {
     await wdioBrowser.waitUntil(
-      async function () {
+      async () => {
         const state = await wdioBrowser.execute(() => document.readyState);
         if (state === "complete") {
           const text = await element.getText();
@@ -60,7 +61,7 @@ class Browser {
       {
         timeout: 10000,
         timeoutMsg:
-          'Header "' + pageHeader + '" is not displayed after given time',
+          `Header "${pageHeader}" is not displayed after the given time`,
         interval: 500,
       }
     );
@@ -74,14 +75,11 @@ class Browser {
   async pause(timeout) {
     await wdioBrowser.pause(timeout);
   }
+
   async scrollIntoView(element) {
-    return await element.scrollIntoView(element);
+    return await element.scrollIntoView();
   }
 
-  // async setValue(element, content) {
-  //     await element.waitForDisplayed(5000);
-  //     await element.setValue(content);
-  // }
   async setValue(element, content) {
     await element.waitForDisplayed({ timeout: 5000 });
     await element.waitForEnabled({ timeout: 5000 });
@@ -106,34 +104,17 @@ class Browser {
 
   async waitForElementToBeEnabled(element) {
     await this.waitForCondition(
-      async () => {
-        return await element.isEnabled();
-      },
+      async () => await element.isEnabled(),
       {
         timeoutMsg: `Element "${element.toString()}" is not enabled after the given time`,
       }
     );
   }
 
-  async waitForElementToBeVisible(element) {
-    await this.waitForCondition(
-      async () => {
-        return await element.isDisplayed();
-      },
-      {
-        timeoutMsg: `Element "${element.toString()}" is not visible after the given time`,
-      }
-    );
-  }
-
   async waitForElementToBeSelected(element) {
-    await this.waitForCondition(() => isElementSelected(element), {
+    await this.waitForCondition(async () => await element.isSelected(), {
       timeoutMsg: `Element "${element.toString()}" is not selected after the given time`,
     });
-
-    async function isElementSelected(element) {
-      return await element.isSelected();
-    }
   }
 
   async pressEnter() {
@@ -150,10 +131,9 @@ class Browser {
     const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
     const fullFilename = path.join(
       screenshotsDir,
-      filename + "-" + timestamp + ".png"
+      `${filename}-${timestamp}.png`
     );
 
-    // Ensure screenshots directory exists
     if (!fs.existsSync(screenshotsDir)) {
       fs.mkdirSync(screenshotsDir);
     }
@@ -162,22 +142,27 @@ class Browser {
     console.log("Screenshot saved: " + fullFilename);
   }
 
-   
   async saveFullPageScreen() {
     console.log("Attempting to capture full page screenshot");
     try {
-        await wdioBrowser.saveFullPageScreen("fullPage", {});
-        console.log("Screenshot captured successfully");
+      await wdioBrowser.saveFullPageScreen("fullPage", {});
+      console.log("Screenshot captured successfully");
     } catch (error) {
-        console.error("Error capturing screenshot:", error);
+      console.error("Error capturing screenshot:", error);
     }
+  }
+
+  async checkUseNavigatedToCorrectUrl(url) {
+    await browser.waitUntil(async () => {
+      return (await browser.getUrl()).includes(url);
+    }, {
+      timeout: 5000,
+      timeoutMsg: `Expected to be redirected to correct ${url} homepage`
+    });
+    console.log(`Navigated to ===> ${url}`);
+  }
+
+  
 }
-
-
-}
-
-
-
 
 export default new Browser();
-
