@@ -1,6 +1,10 @@
 import browser from ".//tests/base/Browser.js";
 import { join } from 'path';
+import notifier from 'node-notifier';
 
+const green = "\x1b[32m"; // Green color for step name
+const yellow = "\x1b[33m"; // Yellow color for scenario name
+const reset = "\x1b[0m"; // Reset to default color
 export const config = {
   //
   // ====================
@@ -61,13 +65,13 @@ export const config = {
       acceptInsecureCerts: true,
       "goog:chromeOptions": {
         args: [
-          "--headless", // Enable headless mode
+          //"--headless", // Enable headless mode
           "--disable-gpu", // Disable GPU usage
-          "--window-size=1920,1080", // Set window size for headless mode
+          //"--window-size=1920,1080", // Set window size for headless mode
           "--no-sandbox", // Recommended for running as root in Docker
-          "--disable-dev-shm-usage", // Overcome limited resource problems
-          "--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
-          '--disable-software-rasterizer', // Disable GPU rasterization (can reduce resource usage)
+         // "--disable-dev-shm-usage", // Overcome limited resource problems
+        //  "--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+         // '--disable-software-rasterizer', // Disable GPU rasterization (can reduce resource usage)
         ],
       },
     },
@@ -129,6 +133,8 @@ export const config = {
         autoSaveBaseline: true,
         blockOutStatusBar: true,
         blockOutToolBar: true,
+       // formatImageName: '{tag}-{logName}',
+
       }]]),
 
   // Framework you want to run your specs with.
@@ -195,8 +201,12 @@ export const config = {
    * @param {object} config wdio configuration object
    * @param {Array.<Object>} capabilities list of capabilities details
    */
-  // onPrepare: function (config, capabilities) {
-  // },
+  onPrepare: function (config, capabilities) {
+    notifier.notify({
+      title: 'WebdriverIO',
+      message: 'Test run started...'
+    })
+  },
   /**
    * Gets executed before a worker process is spawned and can be used to initialize specific service
    * for that worker as well as modify runtime environments in an async fashion.
@@ -255,8 +265,19 @@ export const config = {
    * @param {string}                   uri      path to feature file
    * @param {GherkinDocument.IFeature} feature  Cucumber feature object
    */
-  beforeFeature: function (uri, feature) {
-    console.log("Running feature: " + feature.name);
+  beforeFeature: async function (uri, feature) {
+    //
+    // const { default: chai } = await import('chai');
+    // const { default: chaiWebdriver } = await import('chai-webdriverio');
+
+    // // Use chai and chai-webdriverio
+    // chai.use(chaiWebdriver(browser));
+
+
+    // global.assert = chai.assert;
+    // global.should = chai.should;
+    // global.expect = chai.expect;
+
   },
   /**
    *
@@ -264,8 +285,10 @@ export const config = {
    * @param {ITestCaseHookParameter} world    world object containing information on pickle and test step
    * @param {object}                 context  Cucumber World object
    */
-  // beforeScenario: function (world, context) {
-  // },
+  beforeScenario: function (world, context, scenario) {
+    const scenarioName = world.pickle.name;
+    console.log(yellow + "Running scenario: " + scenarioName + reset);
+  },
   /**
    *
    * Runs before a Cucumber Step.
@@ -274,16 +297,14 @@ export const config = {
    * @param {object}             context  Cucumber World object
    */
   beforeStep: function (step, scenario, context) {
-    const green = "\x1b[32m"; // Green color for step name
-    const yellow = "\x1b[33m"; // Yellow color for scenario name
-    const reset = "\x1b[0m"; // Reset to default color
+  
     console.log("Starting a new step...");
 
     // console.log("Running scenario: " + scenario.pickle.name );
     // console.log("Tags: " + scenario.pickle.tags.map(tag => tag.name).join(", "));
 
     // Extract and log the scenario name
-    console.log(yellow + "In scenario: " + scenario.name + reset);
+  
 
     // Extract and log the Gherkin step name (from the step object)
     console.log(green + "Starting step: " + step.text + reset);
@@ -302,9 +323,15 @@ export const config = {
    * @param {number}             result.duration  duration of scenario in milliseconds
    * @param {object}             context          Cucumber World object
    */
-  afterStep: function (step, scenario, result, context) {
-    if (!result.passed) {
-      browser.saveFullPageScreen();
+  afterStep: async function (step, scenario, result, context) {
+     if (!result.passed) {
+      await browser.saveFullPageScreen();
+      notifier.notify({
+        title: 'Test failure!',
+        message: step.text + 'failed'
+      })
+      
+    // browser.saveFullPageScreen();
     //   try {
     //     browser.captureFullPageScreenshot("screenshot");
     //     console.log("Screenshot captured for failed step.");
@@ -312,6 +339,7 @@ export const config = {
     //     console.error("Error capturing screenshot:", error);
     // }
     }
+    //notifier.notify({ message: step.text + ' passed' });
     result.passed ? console.log("true") : console.log("false");
   },
   /**
@@ -324,8 +352,9 @@ export const config = {
    * @param {number}                 result.duration  duration of scenario in milliseconds
    * @param {object}                 context          Cucumber World object
    */
-  // afterScenario: function (world, result, context) {
-  // },
+  afterScenario: async function (world, result, context) {
+    await browser.quiteBrowser();
+  },
   /**
    *
    * Runs after a Cucumber Feature.
@@ -369,8 +398,12 @@ export const config = {
    * @param {Array.<Object>} capabilities list of capabilities details
    * @param {<Object>} results object containing test results
    */
-  // onComplete: function(exitCode, config, capabilities, results) {
-  // },
+  onComplete: function (exitCode, config, capabilities, results) {
+    notifier.notify({
+      title: 'WebdriverIO',
+      message: 'Test finished running.'
+    })
+  },
   /**
    * Gets executed when a refresh happens.
    * @param {string} oldSessionId session ID of the old session

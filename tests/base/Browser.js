@@ -162,6 +162,9 @@ class Browser {
     console.log(`Navigated to ===> ${url}`);
   }
 
+  async quiteBrowser() {
+    await browser.reloadSession();
+  }
   
 }
 
