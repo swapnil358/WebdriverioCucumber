@@ -165,7 +165,15 @@ class Browser {
   async quiteBrowser() {
     await browser.reloadSession();
   }
+
+  async takeScreenshot() {
+    const screenshot = await browser.takeScreenshot();
+    return screenshot;
+  }
   
+  async getBrowserVersion() {
+    return await browser.capabilities.browserVersion || await browser.capabilities.version;
+  }
 }
 
 export default new Browser();

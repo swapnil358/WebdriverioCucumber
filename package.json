@@ -6,11 +6,13 @@
     "@babel/preset-env": "^7.25.3",
     "@babel/register": "^7.24.6",
     "@types/chai": "^4.3.17",
+    "@wdio/allure-reporter": "^9.0.4",
     "@wdio/cli": "^8.40.3",
     "@wdio/cucumber-framework": "^8.40.2",
     "@wdio/local-runner": "^8.40.2",
     "@wdio/spec-reporter": "^8.39.0",
     "@wdio/visual-service": "^5.2.1",
+    "allure-commandline": "^2.30.0",
     "chai": "^4.5.0",
     "chromedriver": "^127.0.3",
     "cross-env": "^7.0.3",
@@ -25,7 +27,9 @@
     "wdio-appium": "wdio run ./appium.conf.js",
     "wdio-feature": "node run-wdio.js",
     "test:watch": "onchange 'tests/**/*.js --wdio.conf.js'",
-    "appium": "wdio run ./appium.conf.js"
+    "appium": "wdio run ./appium.conf.js",
+    "allure:generate": "allure generate --clean allure-results",
+    "allure:open": "allure open"
   },
   "dependencies": {
     "@wdio/appium-service": "^9.0.1",

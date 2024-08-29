@@ -32,5 +32,5 @@ Feature: login scenarios
     And I click the login button
     Then I should be redirected to the Amazon homepage
     And I should see a welcome message with my username
-
+    And I should see a message "swapnil"
  

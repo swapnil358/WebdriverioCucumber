@@ -42,3 +42,7 @@ Then('I should be redirected to the Amazon homepage', async function () {
 Then('I should see a welcome message with my username', async function () {
     browser.checkUseNavigatedToCorrectUrl("demo.orangehrmlive.com")
 });
+
+Then('I should see a message {string}', async function (name) {
+    await assert.assertEqual(name,"nikhil")
+});

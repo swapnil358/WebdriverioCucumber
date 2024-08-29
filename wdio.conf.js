@@ -65,8 +65,9 @@ export const config = {
       acceptInsecureCerts: true,
       "goog:chromeOptions": {
         args: [
-          //"--headless", // Enable headless mode
+          "--headless", // Enable headless mode
           "--disable-gpu", // Disable GPU usage
+          '--disable-logging',
           //"--window-size=1920,1080", // Set window size for headless mode
           "--no-sandbox", // Recommended for running as root in Docker
          // "--disable-dev-shm-usage", // Overcome limited resource problems
@@ -158,7 +159,15 @@ export const config = {
   // Test reporter for stdout.
   // The only one supported by default is 'dot'
   // see also: https://webdriver.io/docs/dot-reporter
-  // reporters: ['spec'],
+  reporters: [
+   // 'spec',  // Default console reporter
+    ['allure', {
+      outputDir: 'allure-results',
+      disableWebdriverStepsReporting: true, // Optional: Disable WebDriver commands logging
+      disableWebdriverScreenshotsReporting: false, // Optional: Enable screenshots for failed tests
+      useCucumberStepReporter: true, // Optional: Enable Cucumber step reporter for better Cucumber support
+    }],
+   ],
 
   // If you are using Cucumber you need to specify the location of your step definitions.
   cucumberOpts: {
@@ -297,9 +306,6 @@ export const config = {
    * @param {object}             context  Cucumber World object
    */
   beforeStep: function (step, scenario, context) {
-  
-    console.log("Starting a new step...");
-
     // console.log("Running scenario: " + scenario.pickle.name );
     // console.log("Tags: " + scenario.pickle.tags.map(tag => tag.name).join(", "));
 
@@ -307,7 +313,7 @@ export const config = {
   
 
     // Extract and log the Gherkin step name (from the step object)
-    console.log(green + "Starting step: " + step.text + reset);
+    console.log(green + "Start step: " + step.text + reset);
 
     // Log context details (you can customize this as needed)
     //  console.log('Context information:', context);
@@ -352,7 +358,11 @@ export const config = {
    * @param {number}                 result.duration  duration of scenario in milliseconds
    * @param {object}                 context          Cucumber World object
    */
-  afterScenario: async function (world, result, context) {
+  afterScenario: async function (test, context, { error, result, duration, passed, retries }) {
+    if (error) {
+      const screenshot = await browser.takeScreenshot();
+      addAttachment('Screenshot', Buffer.from(screenshot, 'base64'), 'image/png');
+    }
     await browser.quiteBrowser();
   },
   /**
