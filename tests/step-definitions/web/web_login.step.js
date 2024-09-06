@@ -3,7 +3,10 @@ import loginPage from "../../pageobjects/login.js";
 import assert from "../../base/Assert.js";
 import browser from "../../base/Browser.js";
 import commonSelectors from '../../../resources/selectors/common/common.json' assert { type: 'json' };
-
+import { parseDataTableIfHeadet } from "../../utils/dataTableHelper.js";
+import { parseDataTableIfNotHeader } from "../../utils/dataTableHelper.js";
+import fs from 'fs';
+import path from 'path';
 
 
 // Given(/^User launch to application$/, async function(){
@@ -20,12 +23,13 @@ Given('I am on the Amazon login page', async function () {
     //browser.saveFullPageScreen();
 });
 
-When('I enter a valid email and password', async function () {
-    await browser.setValue(eval(commonSelectors.login.username), 'admin');
-    await browser.setValue(eval(commonSelectors.login.password), 'admin123');
-    
-    
-    browser.getPageTitle();
+When("I enter a valid email and password", async function (dataTable) {
+    let credentials = parseDataTableIfHeadet(dataTable);
+    for (const {username,password} of credentials) {
+        await browser.setValue(eval(commonSelectors.login.username), username);
+        await browser.setValue(eval(commonSelectors.login.password), password);
+    }
+    await browser.getPageTitle();
 });
 
 When('I click the login button', async function () {
@@ -46,3 +50,11 @@ Then('I should see a welcome message with my username', async function () {
 Then('I should see a message {string}', async function (name) {
     await assert.assertEqual(name,"nikhil")
 });
+
+Then('I logout from the application', async function () {
+    await browser.click(eval(commonSelectors.logout.panel_logout));
+    await browser.click(eval(commonSelectors.logout.btn_logout));
+    await browser.waitForElementToBeVisible(eval(commonSelectors.login.btn_login));
+});
+
+

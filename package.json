@@ -20,7 +20,9 @@
     "onchange": "^7.1.0",
     "typescript": "^5.5.4",
     "wdio-chromedriver-service": "^8.1.1",
-    "wdio-image-comparison-service": "^5.0.3"
+    "wdio-image-comparison-service": "^5.0.3",
+    "wdio-video-reporter": "^6.0.0",
+    "winston": "^3.14.2"
   },
   "scripts": {
     "wdio": "wdio run ./wdio.conf.js",
@@ -36,7 +38,6 @@
     "chai": "^4.0.1",
     "expect": "^29.7.0",
     "expect-webdriverio": "^4.0.0",
-    "webdriverio": "^8.40.3",
-    "winston": "^3.14.1"
+    "webdriverio": "^8.40.3"
   }
 }

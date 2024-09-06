@@ -16,5 +16,10 @@
     "username": "$('//input[@name=\"username\"]')",
     "password" : "$('//input[@name=\"password\"]')",
     "btn_login" :  "$('//button[@type=\"submit\"]')"
+  },
+  "logout":{
+    "panel_logout": "$('.oxd-userdropdown-tab')",
+    "btn_logout" : "$('//a[text()=\"Logout\"]')"
   }
+
 }

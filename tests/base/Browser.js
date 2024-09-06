@@ -33,15 +33,36 @@ class Browser {
     return await element.getAttribute(attributeName);
   }
 
-  async waitForElementToBeVisible(element) {
+  async waitForElementToBeVisible(elementPromise) {
+    const element = await elementPromise;
+    const elementDescription = element.selector || element.elementId || element.toString();
     await this.waitForCondition(
       async () => await element.isDisplayed(),
       {
-        timeoutMsg: `Element "${element.toString()}" is not visible after the given time`,
+        timeoutMsg: `Element "${elementDescription.toString()}" is not visible after the given time`,
       }
     );
-    console.log("Element Displayed ===> " + await element.toString());
   }
+
+  async waitForElementNotToBeVisible(elementPromise) {
+    const element = await elementPromise; 
+    const elementDescription = element.selector || element.elementId || element.toString();
+    await this.waitForCondition(
+      async () => !(await element.isDisplayed()),
+      {
+        timeoutMsg: `Element "${elementDescription.toString()}" is visible after the given time`,
+      }
+    );
+  }
+
+  async waitUntil(condition) {
+    wdioBrowser.waitUntil(condition, {
+      timeout: 10000,
+      timeoutMsg: 'Expected condition is not satisfied after 10000 ms',
+      interval: 1000,
+    })
+  }
+
 
   async waitForDisplayAndClick(element) {
     await this.waitForElementToBeVisible(element);
@@ -174,6 +195,19 @@ class Browser {
   async getBrowserVersion() {
     return await browser.capabilities.browserVersion || await browser.capabilities.version;
   }
+
+  
+async sessionId(){
+  return await browser.sessionId();
+  }
+  
+
+  async moveTo(element) {
+  return await browser.moveTo(element);
 }
+
+
+}
+
 
 export default new Browser();

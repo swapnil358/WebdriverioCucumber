@@ -1,6 +1,12 @@
 import browser from ".//tests/base/Browser.js";
 import { join } from 'path';
+import fs from 'fs';
 import notifier from 'node-notifier';
+import { addAttachment } from "@wdio/allure-reporter";
+import logger from './/tests//utils/logger.js';
+import { attachMetadataToAllure } from './/tests//utils/allureHelper.js';
+
+
 
 const green = "\x1b[32m"; // Green color for step name
 const yellow = "\x1b[33m"; // Yellow color for scenario name
@@ -65,7 +71,7 @@ export const config = {
       acceptInsecureCerts: true,
       "goog:chromeOptions": {
         args: [
-          "--headless", // Enable headless mode
+         // "--headless", // Enable headless mode
           "--disable-gpu", // Disable GPU usage
           '--disable-logging',
           //"--window-size=1920,1080", // Set window size for headless mode
@@ -73,6 +79,7 @@ export const config = {
          // "--disable-dev-shm-usage", // Overcome limited resource problems
         //  "--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
          // '--disable-software-rasterizer', // Disable GPU rasterization (can reduce resource usage)
+         "--no-default-browser-check"
         ],
       },
     },
@@ -162,11 +169,16 @@ export const config = {
   reporters: [
    // 'spec',  // Default console reporter
     ['allure', {
-      outputDir: 'allure-results',
+      outputDir: './allure-results',
       disableWebdriverStepsReporting: true, // Optional: Disable WebDriver commands logging
       disableWebdriverScreenshotsReporting: false, // Optional: Enable screenshots for failed tests
       useCucumberStepReporter: true, // Optional: Enable Cucumber step reporter for better Cucumber support
     }],
+    // ['video', {
+    //   saveAllVideos: false,       // If true, also saves videos for successful test cases
+    //   videoSlowdownMultiplier: 3, // Higher value to slow down videos for easier watching
+    //   outputDir: './reports/videos/executionVideo.mp4', // Directory to store videos
+    // }],
    ],
 
   // If you are using Cucumber you need to specify the location of your step definitions.
@@ -255,9 +267,9 @@ export const config = {
    */
   before: async function (capabilities, specs) {
     if (typeof browser.saveFullPageScreen === 'function') {
-      console.log("Image Comparison service initialized and available.");
+      logger.info("Image Comparison service initialized and available.");
     } else {
-      console.error("Image Comparison service not initialized properly.");
+      logger.error("Image Comparison service not initialized properly.");
     }
   },
   /**
@@ -297,6 +309,7 @@ export const config = {
   beforeScenario: function (world, context, scenario) {
     const scenarioName = world.pickle.name;
     console.log(yellow + "Running scenario: " + scenarioName + reset);
+    attachMetadataToAllure(world, scenarioName);
   },
   /**
    *
@@ -360,8 +373,11 @@ export const config = {
    */
   afterScenario: async function (test, context, { error, result, duration, passed, retries }) {
     if (error) {
-      const screenshot = await browser.takeScreenshot();
-      addAttachment('Screenshot', Buffer.from(screenshot, 'base64'), 'image/png');
+      // const screenshot = await browser.takeScreenshot();
+      // addAttachment('Screenshot', Buffer.from(screenshot, 'base64'), 'image/png');
+      //addAttachment("name", "Swapnil");
+      //addAttachment("parameter", "Swapnil");
+
     }
     await browser.quiteBrowser();
   },
