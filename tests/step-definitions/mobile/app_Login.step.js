@@ -7,8 +7,9 @@ import commonSelectors from '../../../resources/selectors/common/common.json' as
 
 Given('User Is On Login Screen', async function() {
     // Ensure the app is opened and user is on the login screen
-    const loginActivity = await driver.getCurrentActivity();
-    expect(loginActivity).toEqual('.activities.react.ReactActivity'); // Replace with the actual login activity name if different
+    const loginActivity = browser.getCurrentActivity();
+    assert.assertEqual(loginActivity,".activities.react.ReactActivity","login activity did not matched")
+   // expect(loginActivity).toEqual('.activities.react.ReactActivity'); // Replace with the actual login activity name if different
 });
 
 When('User Enters Valid Credentials', async function() {

@@ -1,13 +1,25 @@
 {
   "home": {
     "bottonMenu": {
-      "lbl_accessibilityStatement": "$('#menu-item-43468')"
+      "lbl_accessibilityStatement": "$('#menu-item-48719')"
     }
   },
   "headerMenu": {
     "lbl_visas": "$('//span[text()=\"Visas\"]')",
     "btn_search": "$('//i[@class=\"ubermenu-icon fa fa-search\"]')",
     "tb_search": "$('//input[@id=\"query\"]')",
-    "icn_socials" : "$('(//div[@class=\"mo-social-links\"])[1]/a[index]')"
+    "icn_socials" : "$('(//div[@class=\"mo-social-links\"])[1]/a[index]')",
+    "login": "$('#nav-link-accountList-nav-line-1')",
+    "btn_upgrade": "$('//button[@class=\"oxd-glass-button orangehrm-upgrade-button\"]')"
+  },
+  "login":{
+    "username": "$('//input[@name=\"username\"]')",
+    "password" : "$('//input[@name=\"password\"]')",
+    "btn_login" :  "$('//button[@type=\"submit\"]')"
+  },
+  "logout":{
+    "panel_logout": "$('.oxd-userdropdown-tab')",
+    "btn_logout" : "$('//a[text()=\"Logout\"]')"
   }
+
 }

@@ -4,9 +4,9 @@ import browser from "../base/Browser.js";
 
 
 class LoginPage{
-    async loginToApplication(url) {
+    async launchUrl(url) {
         await browser.openURL(url);
-        await browser.maximizeWindow();
+        //await browser.maximizeWindow();
     }
 }
 
