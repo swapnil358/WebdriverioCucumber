@@ -5,6 +5,7 @@ import notifier from 'node-notifier';
 import { addAttachment } from "@wdio/allure-reporter";
 import logger from './/tests//utils/logger.js';
 import { attachMetadataToAllure } from './/tests//utils/allureHelper.js';
+import video from "wdio-video-reporter";
 
 
 
@@ -71,7 +72,7 @@ export const config = {
       acceptInsecureCerts: true,
       "goog:chromeOptions": {
         args: [
-         // "--headless", // Enable headless mode
+          "--headless", // Enable headless mode
           "--disable-gpu", // Disable GPU usage
           '--disable-logging',
           //"--window-size=1920,1080", // Set window size for headless mode
@@ -177,7 +178,7 @@ export const config = {
     // ['video', {
     //   saveAllVideos: false,       // If true, also saves videos for successful test cases
     //   videoSlowdownMultiplier: 3, // Higher value to slow down videos for easier watching
-    //   outputDir: './reports/videos/executionVideo.mp4', // Directory to store videos
+    //   //outputDir: './reports/videos/executionVideo.mp4', // Directory to store videos
     // }],
    ],
 
