@@ -35,7 +35,7 @@ export const config = {
   // of the config file unless it's absolute.
   //
   specs: [
-    "./tests/features/web/**/web_login.feature",
+    "./tests/features/web/**/*.feature",
     //'./tests/features/loginPage.feature'
   ],
   // Patterns to exclude.
@@ -58,7 +58,7 @@ export const config = {
   // and 30 processes will get spawned. The property handles how many capabilities
   // from the same test should run tests.
   //
-  maxInstances: 1,
+  maxInstances: 5,
   //
   // If you have trouble getting all important capabilities together, check out the
   // Sauce Labs platform configurator - a great tool to configure your capabilities:
@@ -66,7 +66,7 @@ export const config = {
   //
   capabilities: [
     {
-      maxInstances: 1,
+      maxInstances: 5,
       browserName: "chrome",
       acceptInsecureCerts: true,
       "goog:chromeOptions": {
