@@ -20,7 +20,7 @@ export function attachMetadataToAllure(world, scenarioName) {
             testID = line.split(': ')[1].trim();
         }
 
-        if (line.includes('# @Description :')) {
+        if (line.includes('@Description :')) {
             description = line.split(': ')[1].trim();
         }
 
