@@ -4,7 +4,7 @@ import fs from 'fs';
 import notifier from 'node-notifier';
 import { addAttachment } from "@wdio/allure-reporter";
 import logger from './/tests//utils/logger.js';
-import { attachMetadataToAllure } from './/tests//utils/allureHelper.js';
+import allureHelper from './/tests//utils/allureHelper2.js';
 import video from "wdio-video-reporter";
 
 
@@ -310,7 +310,9 @@ export const config = {
   beforeScenario: function (world, context, scenario) {
     const scenarioName = world.pickle.name;
     console.log(yellow + "Running scenario: " + scenarioName + reset);
-    attachMetadataToAllure(world, scenarioName);
+    allureHelper.addAuthorName(world, scenarioName);
+    allureHelper.addJira(scenarioName);
+    allureHelper.addEnvironmentDetails();
   },
   /**
    *
