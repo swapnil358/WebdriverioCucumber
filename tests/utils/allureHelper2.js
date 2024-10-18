@@ -16,9 +16,9 @@ class allureHelper2 {
     }
 
     addJira(scenarioName) {
-        let jiraIds = this.getPropertyValue(scenarioName,constants.JIRA_FILE_PATH);
+        let jiraIds = this.getPropertyValue(scenarioName, constants.JIRA_FILE_PATH);
         let jiraList = this.splitAuthors(jiraIds);
-        jiraList.forEach(id => allure.addArgument("Jira", jiraLink+id));
+        jiraList.forEach(id => allure.addArgument("Jira", jiraLink + id));
     }
 
 
@@ -27,7 +27,7 @@ class allureHelper2 {
         // Here you can add different environment details dynamically
         //allure.addArgument('Browser', browser.capabilities.browserName);  // Example: Browser Name
         //allure.addArgument('Browser Version', browser.capabilities.browserVersion || browser.capabilities.version);  // Browser version
-       // allure.addArgument('Platform', browser.capabilities.platformName || browser.capabilities.platform);  // Platform (OS)
+        // allure.addArgument('Platform', browser.capabilities.platformName || browser.capabilities.platform);  // Platform (OS)
 
         // You can add more custom environment variables as needed:
         //allure.addArgument('Test Environment', process.env.TEST_ENV || 'Staging');  // Example: Custom environment variable
@@ -54,13 +54,30 @@ class allureHelper2 {
         }
     
         const authorsArray = authorList.split(',');
-        let authorsArr=[]
+        let authorsArr = []
         for (let i = 0; i < authorsArray.length; i++) {
             authorsArr.push(authorsArray[i].trim());
         }
     
         return authorsArray;
-    }   
+    }
+    
+
+    moveFile(sourcePath, destinationPath) {
+        // Ensure the destination directory exists
+        const dir = path.dirname(destinationPath);
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir, { recursive: true });
+        }
+    
+        fs.copyFile(sourcePath, destinationPath, (err) => {
+            if (err) {
+                console.error(`Error moving file: ${err}`);
+            } else {
+                console.log(`File moved successfully from ${sourcePath} to ${destinationPath}`);
+            }
+        });
+    }
 }
 
 export default new allureHelper2();

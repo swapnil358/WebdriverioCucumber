@@ -6,6 +6,7 @@ import { addAttachment } from "@wdio/allure-reporter";
 import logger from './/tests//utils/logger.js';
 import allureHelper from './/tests//utils/allureHelper2.js';
 import video from "wdio-video-reporter";
+import constants from "./tests/common/constants.js";
 
 
 
@@ -428,10 +429,11 @@ export const config = {
    * @param {<Object>} results object containing test results
    */
   onComplete: function (exitCode, config, capabilities, results) {
-    notifier.notify({
-      title: 'WebdriverIO',
-      message: 'Test finished running.'
-    })
+    allureHelper.moveFile(constants.ENVIRONMENT_PROPERTIES,constants.ALLURE_RESULTS);
+    // notifier.notify({
+    //   title: 'WebdriverIO',
+    //   message: 'Test finished running.'
+    // })
   },
   /**
    * Gets executed when a refresh happens.
