@@ -4,7 +4,7 @@ import fs from 'fs';
 import notifier from 'node-notifier';
 import { addAttachment } from "@wdio/allure-reporter";
 import logger from './/tests//utils/logger.js';
-import allureHelper from './/tests//utils/allureHelper2.js';
+import allureHelper from './/tests//utils/allureHelper.js';
 import video from "wdio-video-reporter";
 import constants from "./tests/common/constants.js";
 
@@ -60,7 +60,7 @@ export const config = {
   // and 30 processes will get spawned. The property handles how many capabilities
   // from the same test should run tests.
   //
-  maxInstances: 1,
+  maxInstances: 2,
   //
   // If you have trouble getting all important capabilities together, check out the
   // Sauce Labs platform configurator - a great tool to configure your capabilities:
@@ -429,7 +429,7 @@ export const config = {
    * @param {<Object>} results object containing test results
    */
   onComplete: function (exitCode, config, capabilities, results) {
-    allureHelper.moveFile(constants.ENVIRONMENT_PROPERTIES,constants.ALLURE_RESULTS);
+    allureHelper.moveFile(constants.ENVIRONMENT_PROPERTIES, constants.ALLURE_RESULTS);
     // notifier.notify({
     //   title: 'WebdriverIO',
     //   message: 'Test finished running.'
