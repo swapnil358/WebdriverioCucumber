@@ -1,108 +1,84 @@
 import allure from '@wdio/allure-reporter';
 import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import constants from '../common/constants.js';
 
-export function attachMetadataToAllure(world, scenarioName) {
-    const featureFilePath = world.gherkinDocument.uri;
-    const featureFileContent = fs.readFileSync(featureFilePath, 'utf-8').split('\n');
+let jiraLink = "https://www.jira.com/project/"
 
-    let testIDs = [];
-    let description = null;
-    let author = null;
-    let tag = null;
-    let processingScenario = false;
-    let tagProcessed = false;
+class allureHelper2 {
+    addAuthorName(world, scenarioName) {
+        let authorNames = this.getPropertyValue(scenarioName, constants.AUTHORS_FILE_PATH);
+       // allure.addOwner(authorNames);
+        let autherList = this.splitAuthors(authorNames);
+        autherList.forEach(author => allure.addArgument("Author Name: ", author));
+        
+    }
+
+    addJira(scenarioName) {
+        let jiraIds = this.getPropertyValue(scenarioName, constants.JIRA_FILE_PATH);
+        let jiraList = this.splitAuthors(jiraIds);
+        jiraList.forEach(id => allure.addArgument("Jira: ", jiraLink + id));
+    }
 
 
-    for (let i = 0; i < featureFileContent.length; i++) {
-        const line = featureFileContent[i].trim();
-        if (line.startsWith('Scenario:') && line.includes(scenarioName)) {
-            break;
-        }
-        // Start processing the current scenario
-        if (line.includes('Metadata')) {
-            processingScenario = true;
-            // Reset metadata for each new scenario
-            testIDs = [];
-            description = null;
-            author = null;
-            tag = null;
-            tagProcessed = false; // Reset tag flag
-        }
 
-        // Collect metadata only if processing a scenario
-        if (processingScenario) {
-            if (line.includes('@TestID :')) {
-                const getTestID = line.split(': ')[1].trim();
-                if (getTestID.includes(',')) {
-                    const splitIDs = getTestID.split(','); // Split by comma
-                    splitIDs.forEach(id => testIDs.push(id.trim())); // Trim each and add to array
-                } else {
-                    testIDs.push(getTestID);
-                }
-            }
+    addEnvironmentDetails() {
+        // Here you can add different environment details dynamically
+        //allure.addArgument('Browser', browser.capabilities.browserName);  // Example: Browser Name
+        //allure.addArgument('Browser Version', browser.capabilities.browserVersion || browser.capabilities.version);  // Browser version
+        // allure.addArgument('Platform', browser.capabilities.platformName || browser.capabilities.platform);  // Platform (OS)
 
-            if (line.includes('@Description :')) {
-                description = line.split(': ')[1].trim();
-            }
+        // You can add more custom environment variables as needed:
+        //allure.addArgument('Test Environment', process.env.TEST_ENV || 'Staging');  // Example: Custom environment variable
+        allure.addArgument('URL: ', process.env.TEST_URL || 'https://opensource-demo.orangehrmlive.com/');
+    }
 
-            if (line.includes('@AuthorName :')) {
-                author = line.split(': ')[1].trim();
-            }
-
-            if (line.includes('@Tag :')) {
-                tag = line.split(': ')[1].trim();
-            }
-
-            // Apply metadata when the scenario ends or at the end of the file
-            if (line.includes('@TestID :')) {
-                // Apply metadata
-                if (testIDs.length > 0) {
-                    const processedUrls = new Set();
-                    testIDs.forEach(url => {
-                        if (!processedUrls.has(url)) {
-                            console.log("Processing URL:", url);
-                            addTestIdToAllure(url);
-                            processedUrls.add(url);
-                        } else {
-                            console.warn("URL already processed:", url);
-                        }
-                    });
-                }
-
-                if (description) {
-                    addDescriptionToAllure(description);
-                }
-
-                if (author) {
-                    addAuthorNameToAllure(author);
-                }
-
-                if (tag && !tagProcessed) { // Ensure tags are only added once
-                    addTagToAllure(tag);
-                    console.log("Tag processed: " + tag)
-                    tagProcessed = true; // Mark tag as processed
-                }
-
-                // Reset metadata and stop processing for the current scenario
-                processingScenario = false;
+    
+    getPropertyValue(scenarioName, filePath) {
+        const metadataContent = fs.readFileSync(filePath, 'utf-8').split('\n');
+    
+        for (let line of metadataContent) {
+            const [name, authors] = line.split(':');
+            const scenario = name.trim();
+        
+            if (scenario === scenarioName) {
+                return authors ? authors.trim() : null;
             }
         }
     }
 
-    // Function definitions
-    function addTestIdToAllure(testId) {
-        allure.addLink(testId);
+    splitAuthors(authorList) {
+        if (!authorList) {
+            return [];
+        }
+    
+        const authorsArray = authorList.split(',');
+        let authorsArr = []
+        for (let i = 0; i < authorsArray.length; i++) {
+            authorsArr.push(authorsArray[i].trim());
+        }
+    
+        return authorsArray;
     }
+    
 
-    function addDescriptionToAllure(description) {
-        allure.addDescription(description);
-    }
-
-    function addAuthorNameToAllure(author) {
-        allure.addOwner(author);
-    }
-
-    function addTagToAllure(tag) {
-        allure.addTag(tag);
+    moveFile(sourcePath, destinationPath) {
+        // Ensure the destination directory exists
+        const dir = path.dirname(destinationPath);
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir, { recursive: true });
+        }
+    
+        fs.copyFile(sourcePath, destinationPath, (err) => {
+            if (err) {
+                console.error(`Error moving file: ${err}`);
+            } else {
+                console.log(`File moved successfully from ${sourcePath} to ${destinationPath}`);
+            }
+        });
     }
 }
+
+export default new allureHelper2();
+
