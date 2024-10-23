@@ -18,7 +18,7 @@ class allureHelper2 {
     addJira(scenarioName) {
         let jiraIds = this.getPropertyValue(scenarioName, constants.JIRA_FILE_PATH);
         let jiraList = this.splitAuthors(jiraIds);
-        jiraList.forEach(id => allure.addArgument("Jira: ", jiraLink + id));
+        jiraList.forEach(id => allure.addArgument("Jira: ", jiraLink.trim() + id.trim()));
     }
 
 
