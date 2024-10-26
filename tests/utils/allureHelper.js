@@ -78,6 +78,18 @@ class allureHelper2 {
             }
         });
     }
+
+    attachLogToStep(filePath) {
+    const logFilePath = path.resolve(filePath);//'./logs/combined.log');
+    const logContent = fs.readFileSync(logFilePath, 'utf-8');
+
+    // Attach the log to Allure report for this step
+    allure.addAttachment("Logs", logContent, 'application/json');
+
+    // Optionally clean up the log file if needed (to start fresh for next step)
+        //fs.writeFileSync('filePath', ''); // Clear log file for next step
+    fs.truncateSync(logFilePath, 0);
+    }
 }
 
 export default new allureHelper2();

@@ -3,7 +3,7 @@ import { join } from 'path';
 import fs from 'fs';
 import notifier from 'node-notifier';
 import { addAttachment } from "@wdio/allure-reporter";
-import logger from './/tests//utils/logger.js';
+import logger from './tests/utils/CustomLogger.js';
 import allureHelper from './/tests//utils/allureHelper.js';
 import video from "wdio-video-reporter";
 import constants from "./tests/common/constants.js";
@@ -60,7 +60,7 @@ export const config = {
   // and 30 processes will get spawned. The property handles how many capabilities
   // from the same test should run tests.
   //
-  maxInstances: 2,
+  maxInstances: 5,
   //
   // If you have trouble getting all important capabilities together, check out the
   // Sauce Labs platform configurator - a great tool to configure your capabilities:
@@ -68,7 +68,7 @@ export const config = {
   //
   capabilities: [
     {
-      maxInstances: 1,
+      maxInstances: 5,
       browserName: "chrome",
       acceptInsecureCerts: true,
       "goog:chromeOptions": {
@@ -269,7 +269,7 @@ export const config = {
    */
   before: async function (capabilities, specs) {
     if (typeof browser.saveFullPageScreen === 'function') {
-      logger.info("Image Comparison service initialized and available.");
+      logger.log("Image Comparison service initialized and available.");
     } else {
       logger.error("Image Comparison service not initialized properly.");
     }
@@ -334,6 +334,7 @@ export const config = {
 
     // Log context details (you can customize this as needed)
     //  console.log('Context information:', context);
+    // logger.clearLogs();
   },
   /**
    *
@@ -353,6 +354,7 @@ export const config = {
         title: 'Test failure!',
         message: step.text + 'failed'
       })
+       
       
     // browser.saveFullPageScreen();
     //   try {
@@ -363,7 +365,16 @@ export const config = {
     // }
     }
     //notifier.notify({ message: step.text + ' passed' });
-    result.passed ? console.log("true") : console.log("false");
+  //   if (logger.logStore.length > 0) {
+  //     const logs = logStore.join('\n');  // Combine log messages
+  //     addAttachment('Step Logs', logs, 'text/plain');  // Attach to Allure report
+  //     logStore.length = 0;  // Clear the log store for the next step
+    // }
+    if (logger.getLogs().length > 0) {
+      const logs = logger.getLogs().join('\n');  // Combine log messages
+      addAttachment('Logs', logs, 'application/json');  // Attach to Allure report
+      logger.clearLogs();  // Clear the log store for the next step
+  }
   },
   /**
    *
