@@ -1,6 +1,7 @@
 import { browser as wdioBrowser } from '@wdio/globals';
 import path from 'path';
 import fs from 'fs';
+import logger from '../utils/CustomLogger.js';
 
 class Browser {
   async openURL(url) {
@@ -180,7 +181,7 @@ class Browser {
       timeout: 5000,
       timeoutMsg: `Expected to be redirected to correct ${url} homepage`
     });
-    console.log(`Navigated to ===> ${url}`);
+    logger.log(`Navigated to ===> ${url}`);
   }
 
   async quiteBrowser() {
@@ -204,7 +205,9 @@ async sessionId(){
 
   async moveTo(element) {
   return await browser.moveTo(element);
-}
+  }
+  
+  
 
 
 }
