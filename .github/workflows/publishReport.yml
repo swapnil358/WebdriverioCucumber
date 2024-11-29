@@ -1,10 +1,6 @@
 name: WebdriverIO-Cucumber CI
 
 on:
-  push:
-    branches:
-      - Feature_Nov23
-  pull_request:
   workflow_dispatch: # Enables manual triggering of the workflow
 
 jobs:
