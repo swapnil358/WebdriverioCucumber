@@ -14,7 +14,7 @@
     "@wdio/visual-service": "^5.2.1",
     "allure-commandline": "^2.30.0",
     "chai": "^4.5.0",
-    "chromedriver": "^129.0.3",
+    "chromedriver": "^130.0.3",
     "cross-env": "^7.0.3",
     "node-notifier": "^10.0.1",
     "onchange": "^7.1.0",
