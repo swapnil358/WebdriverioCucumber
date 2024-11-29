@@ -3,8 +3,10 @@ name: WebdriverIO-Cucumber CI
 on:
   push:
     branches:
-      - main
+      - Feature_Nov23
   pull_request:
+    branches:
+     - Feature_Nov23
 
 jobs:
   test:
