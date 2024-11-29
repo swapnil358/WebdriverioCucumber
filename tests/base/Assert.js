@@ -1,31 +1,70 @@
-import { browser as wdioBrowser } from '@wdio/globals'; // Import the global browser
-//import expectWebdriverIO from 'expect-webdriverio';
-//const { expect } = expectWebdriverIO;
-import chai from 'chai';
-import logger from '../utils/CustomLogger.js';
-const chaiExpect = chai.expect;
+import { expect } from 'chai'
 
-class Assert {
 
+class assert{
     async assertEqual(actual, expected, message) {
         const errorMessage = message ? message : `Assert failed ==> ${actual} does not match ${expected}`;
-        logger.log(`Asserting that ${actual} equals ${expected}`);
-        await expect(actual).toEqual(expected, errorMessage); // Chai assertion
-        logger.log(`Assertion passed: ${actual} is equals to ${expected}`);
+        // Log a message before the assertion
+        console.log(`Asserting that ${actual} equals ${expected}`);
+        // Perform the assertion and provide the error message if it fails
+       await expect(actual).to.be.equal(expected, errorMessage);
+        // Log a success message if the assertion passes
+        console.log(message ? message : `Assertion passed: ${actual} equals ${expected}`);
+    } 
+
+    assertNotEqual(actual, expected, message) {
+        return expect(actual).to.be.not.equal(expected, message);
     }
 
-    async assertPageTitle(expectedTitle, message) {
-        const errorMessage = message ? message : `Page title does not match expected title: ${expectedTitle}`;
-        await expect(browser).toHaveTitle(expectedTitle, { message: errorMessage }); // WebdriverIO assertion
+    assertDeepEqual(actual, expected, message) {
+        return expect(actual).to.be.deep.equal(expected, message);
     }
 
-    async assertElementIsVisible(element, message) {
-        const errorMessage = message ? message : `${element.toString()} is not visible`;
-        await expect(element).toBeDisplayed({ message: errorMessage }); // WebdriverIO assertion
-        logger.log(`Assertion passed: ${element.toString()} is visible.`);
+    assertNotDeepEqual(actul, expected, message) {
+        return expect(actual).to.be.not.deep.equal(expected, message);
     }
 
-    // Other assertion methods...
+    assertTrue(value, message) {
+        return expect(value).to.be.true(message);
+    }
+
+    assertFalse(value, message) {
+        return expect(value).to.be.false(message);
+    }
+
+    assertExist(value, message) {
+        return expect(value).to.exist(message);
+    }
+
+    assertNotExist(value, message) {
+        return expect(value).to.not.exist(message);
+    }
+
+    assertGreaterThan(actual, value, message) {
+        return expect(actual).to.be.above(value, message);
+    }
+
+    assertLessThan(actual, value, message) {
+        return expect(actual).to.be.below(value, message);
+    }
+
+    assertInclude(haystack, needle, message) {
+        return expect(haystack).to.include(needle, message);
+    }
+
+    assertNotInclude(haystack, needle, message) {
+        return expect(haystack).to.not.include(needle, message);
+    }
+
+    
+
+
+
+
+
+
+
 }
 
-export default new Assert();
+
+export default new assert();
