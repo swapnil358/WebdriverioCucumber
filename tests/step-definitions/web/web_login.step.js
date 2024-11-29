@@ -5,8 +5,11 @@ import browser from "../../base/Browser.js";
 import commonSelectors from '../../../resources/selectors/common/common.json' assert { type: 'json' };
 import { parseDataTableIfHeadet } from "../../utils/dataTableHelper.js";
 import { parseDataTableIfNotHeader } from "../../utils/dataTableHelper.js";
+import logger from '../../../tests/utils/CustomLogger.js';
 import fs from 'fs';
 import path from 'path';
+import login from "../../pageobjects/login.js";
+
 
 
 // Given(/^User launch to application$/, async function(){
@@ -16,35 +19,26 @@ import path from 'path';
 
 Given('I am on the Amazon login page', async function () {
     await loginPage.launchUrl('https://opensource-demo.orangehrmlive.com/');
-    browser.getPageTitle();
-   // await assert.assertPageTitle('Amazon Sign-In', "Page title does not match 'Amazon Sign-In'");
-    // await assert.assertElementIsVisible(eval(commonSelectors.headerMenu.login), "Login Button is not visible");
-    //await assert.assertEqual("swapnil", "Swapnil");
-    //browser.saveFullPageScreen();
 });
 
 When("I enter a valid email and password", async function (dataTable) {
     let credentials = parseDataTableIfHeadet(dataTable);
-    for (const {username,password} of credentials) {
-        await browser.setValue(eval(commonSelectors.login.username), username);
-        await browser.setValue(eval(commonSelectors.login.password), password);
+    for (const { username, password } of credentials) {
+        await loginPage.enterUserName(eval(commonSelectors.login.username), username);
+        await loginPage.enterPassword(eval(commonSelectors.login.password), password);
     }
-    await browser.getPageTitle();
 });
 
 When('I click the login button', async function () {
-    await browser.click(eval(commonSelectors.login.btn_login));
-    
-    
+    await loginPage.clickSubmit(eval(commonSelectors.login.btn_login));
 });
 
 Then('I should be redirected to the Amazon homepage', async function () {
-    await browser.waitForElementToBeVisible(eval(commonSelectors.headerMenu.btn_upgrade));
-    
+    await loginPage.userLandsOnHomePage();
 });
 
 Then('I should see a welcome message with my username', async function () {
-    browser.checkUseNavigatedToCorrectUrl("demo.orangehrmlive.com")
+    loginPage.checkIfUserNavigatedToCorrectURL();
 });
 
 Then('I should see a message {string}', async function (name) {
@@ -52,9 +46,7 @@ Then('I should see a message {string}', async function (name) {
 });
 
 Then('I logout from the application', async function () {
-    await browser.click(eval(commonSelectors.logout.panel_logout));
-    await browser.click(eval(commonSelectors.logout.btn_logout));
-    await browser.waitForElementToBeVisible(eval(commonSelectors.login.btn_login));
+    await loginPage.logout();
 });
 
 

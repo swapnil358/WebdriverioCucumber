@@ -2,15 +2,16 @@ import { browser as wdioBrowser } from '@wdio/globals'; // Import the global bro
 //import expectWebdriverIO from 'expect-webdriverio';
 //const { expect } = expectWebdriverIO;
 import chai from 'chai';
+import logger from '../utils/CustomLogger.js';
 const chaiExpect = chai.expect;
 
 class Assert {
 
     async assertEqual(actual, expected, message) {
         const errorMessage = message ? message : `Assert failed ==> ${actual} does not match ${expected}`;
-        console.log(`Asserting that ${actual} equals ${expected}`);
-        chaiExpect(actual).to.equal(expected, errorMessage); // Chai assertion
-        console.log(`Assertion passed: ${actual} is equals to ${expected}`);
+        logger.log(`Asserting that ${actual} equals ${expected}`);
+        await expect(actual).toEqual(expected, errorMessage); // Chai assertion
+        logger.log(`Assertion passed: ${actual} is equals to ${expected}`);
     }
 
     async assertPageTitle(expectedTitle, message) {
@@ -21,7 +22,7 @@ class Assert {
     async assertElementIsVisible(element, message) {
         const errorMessage = message ? message : `${element.toString()} is not visible`;
         await expect(element).toBeDisplayed({ message: errorMessage }); // WebdriverIO assertion
-        console.log(`Assertion passed: ${element.toString()} is visible.`);
+        logger.log(`Assertion passed: ${element.toString()} is visible.`);
     }
 
     // Other assertion methods...

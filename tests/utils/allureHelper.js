@@ -1,56 +1,96 @@
 import allure from '@wdio/allure-reporter';
 import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import constants from '../common/constants.js';
 
-export function attachMetadataToAllure(world, scenarioName) {
-    const featureFilePath = world.gherkinDocument.uri;
-    const featureFileContent = fs.readFileSync(featureFilePath, 'utf-8').split('\n');
+let jiraLink = "https://www.jira.com/project/"
 
-    let testID = null;
-    let description = null;
-    let author = null;
-
-    for (let i = 0; i < featureFileContent.length; i++) {
-        const line = featureFileContent[i].trim();
-
-        if (line.startsWith('Scenario:') && line.includes(scenarioName)) {
-            break;
-        }
-
-        if (line.includes('@TestID :')) {
-            testID = line.split(': ')[1].trim();
-        }
-
-        if (line.includes('# @Description :')) {
-            description = line.split(': ')[1].trim();
-        }
-
-        if (line.includes('@AuthorName :')) {
-            author = line.split(': ')[1].trim();
-        }
+class allureHelper2 {
+    addAuthorName(world, scenarioName) {
+        let authorNames = this.getPropertyValue(scenarioName, constants.AUTHORS_FILE_PATH);
+       // allure.addOwner(authorNames);
+        let autherList = this.splitAuthors(authorNames);
+        autherList.forEach(author => allure.addArgument("Author Name: ", author));
+        
     }
 
-    if (testID) {
-        addTestIdToAllure(testID);
+    addJira(scenarioName) {
+        let jiraIds = this.getPropertyValue(scenarioName, constants.JIRA_FILE_PATH);
+        let jiraList = this.splitAuthors(jiraIds);
+        jiraList.forEach(id => allure.addArgument("Jira: ", jiraLink.trim() + id.trim()));
     }
 
-    if (description) {
-        addDescriptionToAllure(description);
-    }
 
-    if (author) {
-        addAuthorNameToAllure(author);
+
+    addEnvironmentDetails() {
+        // Here you can add different environment details dynamically
+        //allure.addArgument('Browser', browser.capabilities.browserName);  // Example: Browser Name
+        //allure.addArgument('Browser Version', browser.capabilities.browserVersion || browser.capabilities.version);  // Browser version
+        // allure.addArgument('Platform', browser.capabilities.platformName || browser.capabilities.platform);  // Platform (OS)
+
+        // You can add more custom environment variables as needed:
+        //allure.addArgument('Test Environment', process.env.TEST_ENV || 'Staging');  // Example: Custom environment variable
+        allure.addArgument('URL: ', process.env.TEST_URL || 'https://opensource-demo.orangehrmlive.com/');
     }
 
     
-    function addTestIdToAllure(testId) {
-        allure.addLink(testId);
+    getPropertyValue(scenarioName, filePath) {
+        const metadataContent = fs.readFileSync(filePath, 'utf-8').split('\n');
+    
+        for (let line of metadataContent) {
+            const [name, authors] = line.split(':');
+            const scenario = name.trim();
+        
+            if (scenario === scenarioName) {
+                return authors ? authors.trim() : null;
+            }
+        }
     }
 
-    function addDescriptionToAllure(description) {
-        allure.addDescription(description);
+    splitAuthors(authorList) {
+        if (!authorList) {
+            return [];
+        }
+    
+        const authorsArray = authorList.split(',');
+        let authorsArr = []
+        for (let i = 0; i < authorsArray.length; i++) {
+            authorsArr.push(authorsArray[i].trim());
+        }
+    
+        return authorsArray;
+    }
+    
+
+    moveFile(sourcePath, destinationPath) {
+        // Ensure the destination directory exists
+        const dir = path.dirname(destinationPath);
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir, { recursive: true });
+        }
+    
+        fs.copyFile(sourcePath, destinationPath, (err) => {
+            if (err) {
+                console.error(`Error moving file: ${err}`);
+            } else {
+                console.log(`File moved successfully from ${sourcePath} to ${destinationPath}`);
+            }
+        });
     }
 
-    function addAuthorNameToAllure(author) {
-        allure.addOwner(author);
+    attachLogToStep(filePath) {
+    const logFilePath = path.resolve(filePath);//'./logs/combined.log');
+    const logContent = fs.readFileSync(logFilePath, 'utf-8');
+
+    // Attach the log to Allure report for this step
+    allure.addAttachment("Logs", logContent, 'application/json');
+
+    // Optionally clean up the log file if needed (to start fresh for next step)
+        //fs.writeFileSync('filePath', ''); // Clear log file for next step
+    fs.truncateSync(logFilePath, 0);
     }
 }
+
+export default new allureHelper2();
+

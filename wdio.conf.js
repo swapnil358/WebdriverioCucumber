@@ -3,8 +3,10 @@ import { join } from 'path';
 import fs from 'fs';
 import notifier from 'node-notifier';
 import { addAttachment } from "@wdio/allure-reporter";
-import logger from './/tests//utils/logger.js';
-import { attachMetadataToAllure } from './/tests//utils/allureHelper.js';
+import logger from './tests/utils/CustomLogger.js';
+import allureHelper from './/tests//utils/allureHelper.js';
+import video from "wdio-video-reporter";
+import constants from "./tests/common/constants.js";
 
 
 
@@ -58,7 +60,7 @@ export const config = {
   // and 30 processes will get spawned. The property handles how many capabilities
   // from the same test should run tests.
   //
-  maxInstances: 1,
+  maxInstances: 5,
   //
   // If you have trouble getting all important capabilities together, check out the
   // Sauce Labs platform configurator - a great tool to configure your capabilities:
@@ -66,12 +68,12 @@ export const config = {
   //
   capabilities: [
     {
-      maxInstances: 1,
+      maxInstances: 5,
       browserName: "chrome",
       acceptInsecureCerts: true,
       "goog:chromeOptions": {
         args: [
-         // "--headless", // Enable headless mode
+          "--headless", // Enable headless mode
           "--disable-gpu", // Disable GPU usage
           '--disable-logging',
           //"--window-size=1920,1080", // Set window size for headless mode
@@ -177,7 +179,7 @@ export const config = {
     // ['video', {
     //   saveAllVideos: false,       // If true, also saves videos for successful test cases
     //   videoSlowdownMultiplier: 3, // Higher value to slow down videos for easier watching
-    //   outputDir: './reports/videos/executionVideo.mp4', // Directory to store videos
+    //   //outputDir: './reports/videos/executionVideo.mp4', // Directory to store videos
     // }],
    ],
 
@@ -267,7 +269,7 @@ export const config = {
    */
   before: async function (capabilities, specs) {
     if (typeof browser.saveFullPageScreen === 'function') {
-      logger.info("Image Comparison service initialized and available.");
+      logger.log("Image Comparison service initialized and available.");
     } else {
       logger.error("Image Comparison service not initialized properly.");
     }
@@ -309,7 +311,9 @@ export const config = {
   beforeScenario: function (world, context, scenario) {
     const scenarioName = world.pickle.name;
     console.log(yellow + "Running scenario: " + scenarioName + reset);
-    attachMetadataToAllure(world, scenarioName);
+    allureHelper.addAuthorName(world, scenarioName);
+    allureHelper.addJira(scenarioName);
+    allureHelper.addEnvironmentDetails();
   },
   /**
    *
@@ -330,6 +334,7 @@ export const config = {
 
     // Log context details (you can customize this as needed)
     //  console.log('Context information:', context);
+    // logger.clearLogs();
   },
   /**
    *
@@ -349,6 +354,7 @@ export const config = {
         title: 'Test failure!',
         message: step.text + 'failed'
       })
+       
       
     // browser.saveFullPageScreen();
     //   try {
@@ -359,7 +365,16 @@ export const config = {
     // }
     }
     //notifier.notify({ message: step.text + ' passed' });
-    result.passed ? console.log("true") : console.log("false");
+  //   if (logger.logStore.length > 0) {
+  //     const logs = logStore.join('\n');  // Combine log messages
+  //     addAttachment('Step Logs', logs, 'text/plain');  // Attach to Allure report
+  //     logStore.length = 0;  // Clear the log store for the next step
+    // }
+    if (logger.getLogs().length > 0) {
+      const logs = logger.getLogs().join('\n');  // Combine log messages
+      addAttachment('Logs', logs, 'application/json');  // Attach to Allure report
+      logger.clearLogs();  // Clear the log store for the next step
+  }
   },
   /**
    *
@@ -425,10 +440,11 @@ export const config = {
    * @param {<Object>} results object containing test results
    */
   onComplete: function (exitCode, config, capabilities, results) {
-    notifier.notify({
-      title: 'WebdriverIO',
-      message: 'Test finished running.'
-    })
+    allureHelper.moveFile(constants.ENVIRONMENT_PROPERTIES, constants.ALLURE_RESULTS);
+    // notifier.notify({
+    //   title: 'WebdriverIO',
+    //   message: 'Test finished running.'
+    // })
   },
   /**
    * Gets executed when a refresh happens.

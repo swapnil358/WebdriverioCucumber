@@ -14,7 +14,7 @@
     "@wdio/visual-service": "^5.2.1",
     "allure-commandline": "^2.30.0",
     "chai": "^4.5.0",
-    "chromedriver": "^127.0.3",
+    "chromedriver": "^129.0.3",
     "cross-env": "^7.0.3",
     "node-notifier": "^10.0.1",
     "onchange": "^7.1.0",
@@ -38,6 +38,7 @@
     "chai": "^4.0.1",
     "expect": "^29.7.0",
     "expect-webdriverio": "^4.0.0",
-    "webdriverio": "^8.40.3"
+    "webdriverio": "^8.40.3",
+    "winston-transport": "^4.8.0"
   }
 }
