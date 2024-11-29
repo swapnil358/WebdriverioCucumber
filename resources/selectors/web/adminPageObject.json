@@ -1,0 +1,9 @@
+{
+    "userManagement":{
+        "txt_username": "$('//div[@class=\"orangehrm-background-container\"]//input[@class=\"oxd-input oxd-input--active\"]')",
+        "dd_userRole": "$('//label[normalize-space()=\"User Role\"]/../following-sibling::div//div[contains(text(),\"Select\")]')",
+        "txt_employeeName": "$('//label[normalize-space()=\"Employee Name\"]/../following-sibling::div//input[@placeholder=\"Type for hints...\"]')",
+        "dd_status": "$('//label[normalize-space()='Status']/..//label[text()=\"Status\"]')"
+    }
+
+}  
