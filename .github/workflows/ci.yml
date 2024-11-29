@@ -1,45 +1,45 @@
-name: WebdriverIO-Cucumber CI
+# name: WebdriverIO-Cucumber CI
 
-on:
-  push:
-    branches:
-      - Feature_Nov23
-  pull_request:
-    branches:
-     - Feature_Nov23
+# on:
+#   push:
+#     branches:
+#       - Feature_Nov23
+#   pull_request:
+#     branches:
+#      - Feature_Nov23
 
-jobs:
-  test:
-    name: Run WebdriverIO Tests and Generate Allure Report
-    runs-on: ubuntu-latest
+# jobs:
+#   test:
+#     name: Run WebdriverIO Tests and Generate Allure Report
+#     runs-on: ubuntu-latest
 
-    steps:
-    # 1. Checkout the repository
-    - name: Checkout Repository
-      uses: actions/checkout@v3
+#     steps:
+#     # 1. Checkout the repository
+#     - name: Checkout Repository
+#       uses: actions/checkout@v3
 
-    # 2. Setup Node.js
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18'
+#     # 2. Setup Node.js
+#     - name: Setup Node.js
+#       uses: actions/setup-node@v3
+#       with:
+#         node-version: '18'
 
-    # 3. Install Dependencies
-    - name: Install Dependencies
-      run: npm install
+#     # 3. Install Dependencies
+#     - name: Install Dependencies
+#       run: npm install
 
-    # 4. Run WebdriverIO Tests
-    - name: Run Tests
-      run: npm run wdio
+#     # 4. Run WebdriverIO Tests
+#     - name: Run Tests
+#       run: npm run wdio
 
-    # 5. Generate Allure Report
-    - name: Generate Allure Report
-      run: npm run allure:generate
+#     # 5. Generate Allure Report
+#     - name: Generate Allure Report
+#       run: npm run allure:generate
 
-    # 6. Upload Allure Report as Artifact
-    - name: Upload Allure Report
-      uses: actions/upload-artifact@v3
-      with:
-        name: allure-report
-        path: allure-report/
+#     # 6. Upload Allure Report as Artifact
+#     - name: Upload Allure Report
+#       uses: actions/upload-artifact@v3
+#       with:
+#         name: allure-report
+#         path: allure-report/
 
