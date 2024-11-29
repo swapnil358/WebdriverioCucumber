@@ -1,0 +1,39 @@
+name: WebdriverIO-Cucumber CI
+
+on:
+  workflow_dispatch: # Enables manual triggering of the workflow
+
+jobs:
+  test:
+    name: Run WebdriverIO Tests and Publish Allure Report
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. Checkout the repository
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    # 2. Setup Node.js
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    # 3. Install Dependencies
+    - name: Install Dependencies
+      run: npm install
+
+    # 4. Run WebdriverIO Tests
+    - name: Run Tests
+      run: npm run wdio
+
+    # 5. Generate Allure Report
+    - name: Generate Allure Report
+      run: npm run allure:generate
+
+    # 6. Publish Allure Report to GitHub Pages
+    - name: Deploy Allure Report to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: allure-report/  # Directory containing the Allure report
