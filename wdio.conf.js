@@ -13,6 +13,8 @@ import constants from "./tests/common/constants.js";
 const green = "\x1b[32m"; // Green color for step name
 const yellow = "\x1b[33m"; // Yellow color for scenario name
 const reset = "\x1b[0m"; // Reset to default color
+
+const headless = process.env.HEADLESS === 'true';
 export const config = {
   //
   // ====================
@@ -73,7 +75,7 @@ export const config = {
       acceptInsecureCerts: true,
       "goog:chromeOptions": {
         args: [
-          "--headless", // Enable headless mode
+          headless ? "--headless": "", // Enable headless mode
           "--disable-gpu", // Disable GPU usage
           '--disable-logging',
           //"--window-size=1920,1080", // Set window size for headless mode
@@ -82,7 +84,7 @@ export const config = {
         //  "--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
          // '--disable-software-rasterizer', // Disable GPU rasterization (can reduce resource usage)
          "--no-default-browser-check"
-        ],
+        ].filter(Boolean),
       },
     },
   ],

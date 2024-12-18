@@ -46,7 +46,7 @@ class Browser {
   }
 
   async waitForElementNotToBeVisible(elementPromise) {
-    const element = await elementPromise; 
+    const element = await elementPromise;
     const elementDescription = element.selector || element.elementId || element.toString();
     await this.waitForCondition(
       async () => !(await element.isDisplayed()),
@@ -198,17 +198,41 @@ class Browser {
   }
 
   
-async sessionId(){
-  return await browser.sessionId();
+  async sessionId() {
+    return await browser.sessionId();
   }
   
 
   async moveTo(element) {
-  return await browser.moveTo(element);
+    return await browser.moveTo(element);
   }
   
+  async selectDropdownByText(dropdownElement, visibleText) {
+    if (!dropdownElement || !visibleText) {
+      throw new Error('Dropdown element or visible text is not provided!');
+    }
+    await this.waitForElementToBeVisible(dropdownElement);
+    await dropdownElement.selectByVisibleText(visibleText);
+    logger.log("Selected option: " + visibleText);
+}
   
-
+async selectDropdownByValue(dropdownElement, value) {
+  if (!dropdownElement || !value) {
+      throw new Error('Dropdown element or value is not provided!');
+  }
+  await this.waitForElementToBeVisible(dropdownElement);
+  await dropdownElement.selectByAttribute('value', value);
+  logger.log(`Selected option by value: ${value}`);
+  }
+  
+  async selectDropdownByIndex(dropdownElement, index) {
+    if (!dropdownElement || typeof index !== 'number') {
+        throw new Error('Dropdown element or index is not provided or invalid!');
+    }
+    await this.waitForElementToBeVisible(dropdownElement);
+    await dropdownElement.selectByIndex(index);
+    logger.log(`Selected option by index: ${index}`);
+}
 
 }
 
